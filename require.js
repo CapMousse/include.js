@@ -11,7 +11,7 @@
     // Initial Setup
     // -------------
     var require,
-        scripts = document.getElementsByTagName('script');
+        scripts = document.getElementsByTagName('script'),
         body = document.body,
         cache = {},
         queue = {},
@@ -54,9 +54,9 @@
                 scriptCounter++;
             }
             
-            if(scriptCounter == 0)
+            if(scriptCounter === 0)
                 endFunc();
-       }
+       };
     };
     
     /*
