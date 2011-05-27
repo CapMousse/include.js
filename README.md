@@ -20,8 +20,8 @@ require([
 Version
 -------
 *0.2*
-*Bugfix : cache not working properply
-*Added : strict mode: file test.js is not like test/test.js
+* Bugfix : cache not working properply
+* Added : strict mode: file test.js is not like test/test.js
 
 *0.1*
 * First release
