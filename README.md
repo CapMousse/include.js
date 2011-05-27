@@ -1,18 +1,30 @@
-# README for a newly created project.
+Require.js
+==========
+A tiny javascript loader with cache control.
 
-There are a couple of things you should do first, before you can use all of Git's power:
+How to
+------
+Simplely add *require.js* in your project and load it.
+To use it simplery add ```require('your/file.js', callback())```
+To load mutiple script, send and array like:
+```require([
+    'script1.js',
+    'js/script2.js',
+    'other/js/script3.js
+],function(){
+    //do something extraordinay
+});```
 
-  * Add a remote to this project: in the Cloud9 IDE command line, you can execute the following commands
-    `git remote add [remote name] [remote url (eg. 'git@github.com:/ajaxorg/node_chat')]` [Enter]
-  * Create new files inside your project
-  * Add them to to Git by executing the following command
-    `git add [file1, file2, file3, ...]` [Enter]
-  * Create a commit which can be pushed to the remote you just added
-    `git commit -m 'added new files'` [Enter]
-  * Push the commit the remote
-    `git push [remote name] master` [Enter]
+Version
+-------
+*0.2*
+*Bugfix : cache not working properply
+*Added : strict mode: file test.js is not like test/test.js
 
-That's it! If this doesn't work for you, please visit the excellent resources from [Github.com](http://help.github.com) and the [Pro Git](http://http://progit.org/book/) book.
-If you can't find your answers there, feel free to ask us via Twitter (@cloud9ide), [mailing list](groups.google.com/group/cloud9-ide) or IRC (#cloud9ide on freenode).
+*0.1*
+* First release
 
-Happy coding!
+About
+-----
+Created by Jérémy Barbe (c) 2011
+require.js is distributed under the MIT license.
