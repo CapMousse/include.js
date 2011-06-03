@@ -15,29 +15,47 @@
         body = document.body,
         cache = {},
         queue = {},
-        endFunc = function(){},
+        emptyFn = function(){},
+        success = emptyFn,
+        error = function(file){ console.log('The file '+file+" can't be loaded"); },
+        complete = emptyFn,
         scriptCounter = 0,
         loadedCounter = 0,
+        errorCounter = 0,
         strictFiles = false;
         
     /*
     * require
     * Load all files list in object
-    * @param arr : array of file
-    * @param fnc : callback when all files are loaded
-    * @param strict optional : if true, file this/path.js != path.js
+    * @param    params   object
+    * params is an object which contain all informations for require.
+    * {
+    *   'files' : [
+    *       ['filename', callback] 
+    *       or 
+    *       'filename'
+    *   ],
+    *   complete    function    launched when all files script are created
+    *   success     function    launched when all files are successfully loaded
+    *   error       function    launched when file can't be loaded,
+    *   strict      boolean     use strict mode
+    * }
+    * 
     * @return Require
     */   
-    require = function(arr, fnc, strict){
+    require = function(params){
         var windowLoad = window.onload || function(){};
         
-        strictFiles = strict || false;
+        strictFiles = params.strict || false;
         
         window.onload = function(){
             windowLoad();
             
-            arr = arr.push() ? arr : [arr];
-            endFunc = fnc;
+            files = params.files.push() ? params.files : [params.files];
+            success = params.success || success;
+            complete = params.complete || complete;
+            error = params.error || error;
+            
             
             for(var j in scripts){                
                 if(scripts[j].src){
@@ -45,40 +63,60 @@
                 }
             }
             
-            for(var i in arr){
-                var script = getName(arr[i]);
+            for(var i in files){
+                var file, script,
+                    callback = emptyFn;
+                    
+                if(typeof files[i] !== "string"){
+                    file = files[i][0];
+                    script = getName(files[i][0]);
+                    callback = getName(files[i][1]);
+                }else{
+                    file = files[i];
+                    script = getName(files[i]);
+                }
                 
                 if(cache[script] || queue[script]) continue;
                 
-                create(arr[i], i);
+                create(file, i, callback);
                 scriptCounter++;
             }
             
-            if(scriptCounter === 0)
-                endFunc();
+            if(scriptCounter === 0){
+                complete();
+                success();
+            }
        };
     };
     
     /*
      * function create
      * create a script node with asked file
-     * @param file : the file
-     * @param index: index of file
-     * @return the dom object
+     * @param   file      the file
+     * @param   index     index of file
+     * @param   callback  callback for the current file
+     * @return  void
      */
-    function create(file, index){
+    function create(file, index, callback){
         var script = document.createElement('script');
         
         script.onload = script.onerror = function(event){    
-            if(event.type == "error")
-                console.log("File "+file+" cannot be loaded");
-
+            if(event.type == "error"){
+                errorCounter++;
+                error(file);
+            }else
+                callback();
+            
             loadedCounter++;
             delete queue[getName(file)];
             cache[getName(file)] = index;
 
-            if(loadedCounter == scriptCounter)
-                endFunc();
+            if(loadedCounter == scriptCounter){
+                complete();
+                
+                if(errorCounter === 0)
+                    success();
+            }
             
             return true;
         };
