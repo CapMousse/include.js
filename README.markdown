@@ -1,6 +1,6 @@
 Require.js
 ==========
-A tiny javascript loader with cache control.
+A tiny javascript/javascript template loader with cache control.
 
 How to
 ------
@@ -9,7 +9,7 @@ Simplely add *require.js* in your project and load it.
 require({
     files : [
         'script1.js',
-        'js/script2.js',
+        'template.tpl',
         ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}]
     ],
     success : function(){
@@ -30,6 +30,13 @@ require({
 
 Version
 -------
+#### 0.4
+* Added : you can now load .tpl files
+
+* Bugfix : crash on IE7
+* Bugfix : can't use multiple time require
+* Bugfix : files loaded 2 times
+
 #### 0.3
 * Added : file can now have a specific callback
 * Added : complete, success, error callback
