@@ -5,28 +5,27 @@ A tiny javascript/javascript template loader with cache control.
 How to
 ------
 Simplely add *require.js* in your project and load it.
-```
-require({
-    files : [
-        'script1.js',
-        'template.tpl',
-        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}]
-    ],
-    success : function(){
-        //do something extraordinary when all files successfuly loaded
-    },
-    //optional
-    complete : function(){
-        //do something extraordinary when all files parsed
-    },
-    //optional
-    error : function(){
-        //do something bad when a file can't be loaded
-    },
-    //optional
-    strict : true //two files with same name can't be loaded. Even in different dir.
-});
-```
+
+    require({
+        files : [
+            'script1.js',
+            'template.tpl',
+            ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}]
+        ],
+        success : function(){
+            //do something extraordinary when all files successfuly loaded
+        },
+        //optional
+        complete : function(){
+            //do something extraordinary when all files parsed
+        },
+        //optional
+        error : function(){
+            //do something bad when a file can't be loaded
+        },
+        //optional
+        strict : true //two files with same name can't be loaded. Even in different dir.
+    });
 
 Version
 -------
