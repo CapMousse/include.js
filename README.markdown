@@ -29,6 +29,14 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 0.4.1
+* Change : Error now receive 2 parameters : Event and File
+* Change : Asyc mode is now an option
+
+* Bugfix : template id not correct (like id="dir/to/the/template)
+* Bugfix : template not loaded correctly
+* Bugfix : strict mode always on
+
 #### 0.4
 * Added : you can now load .tpl files
 

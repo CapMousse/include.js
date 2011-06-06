@@ -1,4 +1,4 @@
-//     require.js 0.4
+//     require.js 0.4.1
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -11,18 +11,18 @@
     // Initial Setup
     // -------------
     var require,
+
+        //Configurable var
+        strictFiles = false,
+        async = true,
+         
         scripts = document.getElementsByTagName('script'),
         body = document.body,
         cache = {},
         queue = {},
         emptyFn = function(){},
-        success = emptyFn,
-        error = emptyFn,
-        complete = emptyFn,
-        scriptCounter = 0,
-        loadedCounter = 0,
-        errorCounter = 0,
-        strictFiles = false;
+        success, error, complete,
+        scriptCounter, loadedCounter, errorCounter;
         
     /*
     * require
@@ -101,12 +101,13 @@
      */
     function create(file, index, callback){
         var script = document.createElement('script'),
-            fileName = getName(file);
+            fileName = getName(file),
+            fileType = getType(file);
         
         script.onload = script.onerror = function(event){    
             if(event.type == "error"){
                 errorCounter++;
-                error(file);
+                error(event, file);
             }else
                 callback();
             
@@ -125,10 +126,10 @@
         };
         
         queue[fileName] = index;
-        script.async = 1;
+        script.async = async ? 1 : 0;
         script.id = fileName;
         script.src = file;
-        script.type = getType(file);
+        script.type = fileType;
         body.appendChild(script);
     }    
     
@@ -139,7 +140,12 @@
      * @return the script name
      */
     function getName(file){
-        return strictFiles ? file.toString().split('/').pop() : file;
+        var name = file.toString().split('/').pop();
+        name = name.split('.');
+        name.pop();
+        name = name.join('-');
+
+        return strictFiles ? file : name;
     }   
     
     /*
