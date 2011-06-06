@@ -64,7 +64,7 @@
             }
             
             for(var i in files){
-                if (myArray.hasOwnProperty(files[i])) {
+                if (files[i].hasOwnProperty(0)) {
                     var file, script,
                         callback = emptyFn;
                         
