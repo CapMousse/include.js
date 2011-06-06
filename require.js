@@ -14,7 +14,7 @@
 
         //Configurable var
         strictFiles = false,
-        async = true,
+        async = false,
          
         scripts = document.getElementsByTagName('script'),
         body = document.body,
@@ -39,6 +39,7 @@
     *   success     function    launched when all files are successfully loaded
     *   error       function    launched when file can't be loaded,
     *   strict      boolean     use strict mode
+    *   async       boolean     use async mode
     * }
     * 
     * @return Require
@@ -46,6 +47,8 @@
     require = function(params){
         
         strictFiles = params.strict || false;
+        async = params.async || false;
+
         success = error = complete = emptyFn;
         scriptCounter = loadedCounter = errorCounter = 0;
         queue = {};
@@ -64,11 +67,12 @@
             }
             
             for(var i in files){
-                if (files[i].hasOwnProperty(0)) {
+                if(typeof files[i] === "string" || files[i] instanceof Array){
                     var file, script,
                         callback = emptyFn;
-                        
-                    if(typeof files[i] !== "string"){
+                    
+                    console.log(files[i]);
+                    if(files[i] instanceof Array){
                         file = files[i][0];
                         script = getName(files[i][0]);
                         callback = getName(files[i][1]);
@@ -126,7 +130,7 @@
         };
         
         queue[fileName] = index;
-        script.async = async ? 1 : 0;
+        script.async = async;
         script.id = fileName;
         script.src = file;
         script.type = fileType;
