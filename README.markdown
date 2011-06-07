@@ -29,6 +29,16 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 0.4.2
+* Remove : Template support due for non usable content. Use a real javascript templating systeme like Underscore templates.
+
+* Bugfix : Strict mode can't be change on params
+* Bugfix : Cache not working correctly
+* Bugfix : Load fetch undefined files
+
+* Change : validate with [jslint](http://www.jslint.com/)
+
+
 #### 0.4.1
 * Change : Error now receive 2 parameters : Event and File
 * Change : Asyc mode is now an option
@@ -60,5 +70,5 @@ Version
 
 About
 -----
-Created by Jérémy Barbe (c) 2011
+Created by [Jérémy Barbe](htt://www.shwaark.com) (c) 2011
 require.js is distributed under the MIT license.

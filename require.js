@@ -1,19 +1,20 @@
-//     require.js 0.4.1
+//     require.js 0.4.2
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
 (function(){
     
     //check if already defined
-    if(window.require)
+    if(window.require){
         return;
+    }
 
     // Initial Setup
     // -------------
     var require,
 
         //Configurable var
-        strictFiles = false,
+        strictFiles = true,
         async = false,
          
         scripts = document.getElementsByTagName('script'),
@@ -22,7 +23,7 @@
         queue = {},
         emptyFn = function(){},
         success, error, complete,
-        scriptCounter, loadedCounter, errorCounter;
+        scriptCounter, loadedCounter, errorCounter, files;
         
     /*
     * require
@@ -45,54 +46,54 @@
     * @return Require
     */   
     require = function(params){
+        var i, j;
         
         strictFiles = params.strict || false;
         async = params.async || false;
 
-        success = error = complete = emptyFn;
+                   
+        files = params.files instanceof Array ? params.files : [params.files];
+        success = params.success || emptyFn;
+        error = params.error || emptyFn;
+        complete = params.complete || emptyFn;
         scriptCounter = loadedCounter = errorCounter = 0;
         queue = {};
-        
-        (function(){            
-            files = params.files instanceof Array ? params.files : [params.files];
-            success = params.success || success;
-            complete = params.complete || complete;
-            error = params.error || error;
+       
             
-            
-            for(var j in scripts){                
+        for(j in scripts){
+            if(scripts.hasOwnProperty(j)){
                 if(scripts[j].src){
                     cache[getName(scripts[j].src)] = j;
                 }
             }
-            
-            for(var i in files){
-                if(typeof files[i] === "string" || files[i] instanceof Array){
-                    var file, script,
-                        callback = emptyFn;
-                    
-                    console.log(files[i]);
-                    if(files[i] instanceof Array){
-                        file = files[i][0];
-                        script = getName(files[i][0]);
-                        callback = getName(files[i][1]);
-                    }else{
-                        file = files[i];
-                        script = getName(files[i]);
-                    }
-                    
-                    if(cache[script] || queue[script]) continue;
-                    
-                    create(file, i, callback);
-                    scriptCounter++;
+        }
+
+        for(i in files){
+            if(files.hasOwnProperty(i)){                
+                var file, script,
+                    callback = emptyFn;
+                if(files[i] instanceof Array){
+                    file = files[i][0];
+                    script = getName(files[i][0]);
+                    callback = getName(files[i][1]);
+                }else{
+                    file = files[i];
+                    script = getName(files[i]);
                 }
+
+                if(typeof cache[script] !== "undefined" || typeof queue[script] !== "undefined"){
+                    continue;
+                }
+                
+                create(file, i, callback);
+                scriptCounter++;
             }
-            
-            if(scriptCounter === 0){
-                complete();
-                success();
-            }
-       })();
+        }
+
+        if(scriptCounter === 0){
+            complete();
+            success();
+        }
     };
     
     /*
@@ -105,67 +106,57 @@
      */
     function create(file, index, callback){
         var script = document.createElement('script'),
-            fileName = getName(file),
-            fileType = getType(file);
+            fileName = getName(file);
         
         script.onload = script.onerror = function(event){    
-            if(event.type == "error"){
+            if(event.type === "error"){
                 errorCounter++;
                 error(event, file);
-            }else
+            }else{
                 callback();
+            }
             
             loadedCounter++;
             delete queue[getName(file)];
             cache[getName(file)] = index;
 
-            if(loadedCounter == scriptCounter){
+            if(loadedCounter === scriptCounter){
                 complete();
                 
-                if(errorCounter === 0)
+                if(errorCounter === 0){
                     success();
+                }
             }
             
             return true;
         };
         
         queue[fileName] = index;
+        
         script.async = async;
-        script.id = fileName;
         script.src = file;
-        script.type = fileType;
+        
         body.appendChild(script);
     }    
-    
+   
     /*
      * function getName
      * get script name
      * @param file : the file uri
+     * @param strict : force strict mode
      * @return the script name
      */
-    function getName(file){
+    function getName(file, strict){
+        strict = strict || strictFiles;
+        
         var name = file.toString().split('/').pop();
         name = name.split('.');
         name.pop();
         name = name.join('-');
 
-        return strictFiles ? file : name;
-    }   
-    
-    /*
-     * function getType
-     * get script type
-     * @param   file : the file uri
-     * @return  string the script type
-     */
-    function getType(file){
-        var types = {
-            js : 'text/javascript',
-            tpl: 'text/template'
-        };
-        
-        return types[file.toString().split('.').pop()] || types.js;
+        return strictFiles || strict ? name : file;
     }
     
     window.require = require;
-})();
+    
+}).call(this);
