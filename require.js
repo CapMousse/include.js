@@ -1,4 +1,4 @@
-//     require.js 0.4.2
+//     require.js 0.5
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -71,11 +71,20 @@
         for(i in files){
             if(files.hasOwnProperty(i)){                
                 var file, script,
-                    callback = emptyFn;
+                    callback = emptyFn, 
+                    obj = null;
+                
                 if(files[i] instanceof Array){
                     file = files[i][0];
                     script = getName(files[i][0]);
-                    callback = getName(files[i][1]);
+                    
+                    if(typeof files[i][1] === "string"){
+                        obj = files[i][1];
+                    }else{
+                        callback = files[i][1];
+                    }
+                    
+                    obj = obj || files[i][2] || null;
                 }else{
                     file = files[i];
                     script = getName(files[i]);
@@ -85,7 +94,7 @@
                     continue;
                 }
                 
-                create(file, i, callback);
+                create(file, i, callback, obj);
                 scriptCounter++;
             }
         }
@@ -102,30 +111,39 @@
      * @param   file      the file
      * @param   index     index of file
      * @param   callback  callback for the current file
+     * @param   obj       the object loaded in file
      * @return  void
      */
-    function create(file, index, callback){
+    function create(file, index, callback, obj){
         var script = document.createElement('script'),
             fileName = getName(file);
         
-        script.onload = script.onerror = function(event){    
+        script.onload = script.onerror = function(event){
+            var t, i;
+            
             if(event.type === "error"){
                 errorCounter++;
                 error(event, file);
             }else{
                 callback();
-            }
+            }            
             
-            loadedCounter++;
-            delete queue[getName(file)];
-            cache[getName(file)] = index;
-
-            if(loadedCounter === scriptCounter){
-                complete();
-                
-                if(errorCounter === 0){
-                    success();
-                }
+            if(obj !== null){
+                t = setInterval(function(){
+                    if(typeof eval('window.'+obj) !== "undefined"){
+                        countFiles(file, index);
+                        clearInterval(t);
+                    }else if(i > 10){
+                        errorCounter++;
+                        error(obj, file);
+                        countFiles(file, index);
+                        clearInterval(t);
+                    }
+                    
+                    i++;
+                }, 10);
+            }else{
+                countFiles(file, index);
             }
             
             return true;
@@ -137,7 +155,7 @@
         script.src = file;
         
         body.appendChild(script);
-    }    
+    }
    
     /*
      * function getName
@@ -155,6 +173,29 @@
         name = name.join('-');
 
         return strictFiles || strict ? name : file;
+    }
+    
+    /*
+     * function countFiles
+     * count files loaded and launch callback
+     * @param file
+     * @param index
+     * @return void
+     */
+    function countFiles(file, index){        
+        loadedCounter++;
+        delete queue[getName(file)];
+        cache[getName(file)] = index;
+
+        if(loadedCounter === scriptCounter){
+            complete();
+
+            if(errorCounter === 0){
+                success();
+            }
+        }
+        
+        return true;
     }
     
     window.require = require;
