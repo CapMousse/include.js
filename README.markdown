@@ -30,6 +30,10 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 0.5.1
+* Change compression method
+* Remove call(this) due to IE bug
+
 #### 0.5
 * Added : Third (optional) parametter to files, the object to be loaded
 

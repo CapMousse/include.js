@@ -1,13 +1,11 @@
-//     require.js 0.5
+//     require.js 0.5.1
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
 (function(){
     
     //check if already defined
-    if(window.require){
-        return;
-    }
+    if(window.require){ return; }
 
     // Initial Setup
     // -------------
@@ -46,12 +44,10 @@
     * @return Require
     */   
     require = function(params){
-        var i, j;
+        var i,j;
         
         strictFiles = params.strict || false;
-        async = params.async || false;
-
-                   
+        async = params.async || false;               
         files = params.files instanceof Array ? params.files : [params.files];
         success = params.success || emptyFn;
         error = params.error || emptyFn;
@@ -59,7 +55,6 @@
         scriptCounter = loadedCounter = errorCounter = 0;
         queue = {};
        
-            
         for(j in scripts){
             if(scripts.hasOwnProperty(j)){
                 if(scripts[j].src){
@@ -200,4 +195,4 @@
     
     window.require = require;
     
-}).call(this);
+})();
