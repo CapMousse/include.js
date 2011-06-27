@@ -30,6 +30,10 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 0.5.2
+* Bugfix : Require loading directly scripts, not after DOMCOntentLoaded event
+* Bugfix : function call before they where created
+
 #### 0.5.1
 * Change compression method
 * Remove call(this) due to IE bug

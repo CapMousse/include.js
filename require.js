@@ -1,4 +1,4 @@
-//     require.js 0.5.1
+//     require.js 0.5.2
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -15,11 +15,8 @@
         strictFiles = true,
         async = false,
          
-        scripts = document.getElementsByTagName('script'),
-        body = document.body,
-        cache = {},
-        queue = {},
-        emptyFn = function(){},
+        scripts = document.getElementsByTagName('script'), contentLoaded = 'DOMContentLoaded',
+        cache = {}, queue = {}, emptyFn = function(){},
         success, error, complete,
         scriptCounter, loadedCounter, errorCounter, files;
         
@@ -47,57 +44,61 @@
         var i,j;
         
         strictFiles = params.strict || false;
-        async = params.async || false;               
+        async = params.async || true;               
         files = params.files instanceof Array ? params.files : [params.files];
         success = params.success || emptyFn;
         error = params.error || emptyFn;
         complete = params.complete || emptyFn;
         scriptCounter = loadedCounter = errorCounter = 0;
         queue = {};
-       
-        for(j in scripts){
-            if(scripts.hasOwnProperty(j)){
-                if(scripts[j].src){
-                    cache[getName(scripts[j].src)] = j;
+        
+        document.addEventListener(contentLoaded, function parse(){
+            document.removeEventListener(contentLoaded, parse, false);
+
+            for(j in scripts){
+                if(scripts.hasOwnProperty(j)){
+                    if(scripts[j].src){
+                        cache[getName(scripts[j].src)] = j;
+                    }
                 }
             }
-        }
 
-        for(i in files){
-            if(files.hasOwnProperty(i)){                
-                var file, script,
-                    callback = emptyFn, 
-                    obj = null;
-                
-                if(files[i] instanceof Array){
-                    file = files[i][0];
-                    script = getName(files[i][0]);
+            for(i in files){
+                if(files.hasOwnProperty(i)){                
+                    var file, script,
+                        callback = emptyFn, 
+                        obj = null;
                     
-                    if(typeof files[i][1] === "string"){
-                        obj = files[i][1];
+                    if(files[i] instanceof Array){
+                        file = files[i][0];
+                        script = getName(files[i][0]);
+                        
+                        if(typeof files[i][1] === "string"){
+                            obj = files[i][1];
+                        }else{
+                            callback = files[i][1];
+                        }
+                        
+                        obj = obj || files[i][2] || null;
                     }else{
-                        callback = files[i][1];
+                        file = files[i];
+                        script = getName(files[i]);
+                    }
+
+                    if(typeof cache[script] !== "undefined" || typeof queue[script] !== "undefined"){
+                        continue;
                     }
                     
-                    obj = obj || files[i][2] || null;
-                }else{
-                    file = files[i];
-                    script = getName(files[i]);
+                    create(file, i, callback, obj);
+                    scriptCounter++;
                 }
-
-                if(typeof cache[script] !== "undefined" || typeof queue[script] !== "undefined"){
-                    continue;
-                }
-                
-                create(file, i, callback, obj);
-                scriptCounter++;
             }
-        }
 
-        if(scriptCounter === 0){
-            complete();
-            success();
-        }
+            if(scriptCounter === 0){
+                complete();
+                success();
+            }
+        });
     };
     
     /*
@@ -149,7 +150,7 @@
         script.async = async;
         script.src = file;
         
-        body.appendChild(script);
+        document.body.appendChild(script);
     }
    
     /*
@@ -195,4 +196,4 @@
     
     window.require = require;
     
-})();
+});
