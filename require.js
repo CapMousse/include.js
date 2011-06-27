@@ -196,4 +196,4 @@
     
     window.require = require;
     
-});
+})();
