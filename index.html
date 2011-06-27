@@ -1,0 +1,76 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="fr" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="fr" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="fr" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="fr" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="fr"> <!--<![endif]-->
+<head>
+	<meta charset="UTF-8">
+	
+	<title>Require.js - A tiny javascript loader</title>
+	<meta name="description" content="A tiny javascript loader with cache control">
+	<meta name="author" content="Jérémy Barbe">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link type="text/plain" rel="author" href="humans.txt" />
+	<link rel="stylesheet" href="static/css/style.css?v=2">
+	<link  href="http://fonts.googleapis.com/css?family=Terminal+Dosis+Light:regular&v1" rel="stylesheet" type="text/css" >
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+<body role="document" class="clearfix">
+	<header>
+		<h1><a href="https://github.com/CapMousse/require.js">Require.js</a></h1>
+		<h2>A tiny javascript loader with cache control</h2>
+	</header>
+	<section id="main" role="main">
+		<article>
+		<p>Require.js is a tiny javascript load (1.2k) with cache control.</p>
+		<p>Just place it in the head of your document with the list of all files needed to accelerate your page loading.</p>
+		<h1>Usage</h1>
+		<p>Insert Require.js in the head/body end of your document. You need to pass an object with all infos needed to do the magic :</p>
+		<pre class="prettyprint">require({
+    files : array of files,
+    success : optional function launched when all files are successfully loaded,
+    complete : optional function launched when all files are parsed,
+    error : optional function launched when a file cannot be loaded ,
+    strict : optional boolean
+});</pre>
+		<p>A file can be represented by a string (path to the file) or an other array wich contain the file path, a callback function when the file is loaded and optionally the object name to be loaded.</p>
+		<pre class="prettyprint">[
+    'javascript/main.js',
+    ['javascript/file.js', function(){}],
+    ['javascript/jquery.js', function(){}, '$']
+]</pre>
+		<h1>Exemple</h1>
+		<pre class="prettyprint">require({
+    files : [
+        'js/foo.js',
+        'js/bar.js',
+        ['js/foobar.js', function(){
+            foobar();
+        }]
+    ],
+    success : function(){
+        new foo();
+    }
+});</pre>
+	</section>
+	<footer>
+		<a href="https://github.com/CapMousse/require.js">Fork on GitHub</a>
+	</footer>
+	<a id="link" href="https://github.com/CapMousse/require.js"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on github" /></a>
+	
+	<script src="static/js/require.js"></script>
+	<script>
+		require({
+			files: 'static/js/prettify.js',
+			success: function(){
+				prettyPrint();
+			}
+		});
+	</script>
+</body>
+</html>

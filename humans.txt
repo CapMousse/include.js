@@ -1,0 +1,13 @@
+/* TEAM */
+	Creator: Jérémy Barbe
+	url: http://CapMousse.gitbub.com/require.js
+	Contact: contact [at] jeremybarbe.fr
+	Twitter: @capitainemousse
+	From: Troyes, Aube, France
+
+/* SITE */
+	Last update: 2011/06/26
+	Language: English
+	Doctype: HTML5
+	IDE: Sublime Text 2, Wamp, Chrome (Yslow, SpeedTracer)
+	Framework: Shwaark Framework (php), HTMLBoilerPlate (html, css)
