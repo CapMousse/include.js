@@ -30,6 +30,10 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 0.5.3
+* Bugfix : main function not runing (oups bug)
+* Change : domLoad event checked at first run.
+
 #### 0.5.2
 * Bugfix : Require loading directly scripts, not after DOMCOntentLoaded event
 * Bugfix : function call before they where created

@@ -1,4 +1,4 @@
-//     require.js 0.5.2
+//     require.js 0.5.3
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -15,7 +15,7 @@
         strictFiles = true,
         async = false,
          
-        scripts = document.getElementsByTagName('script'), contentLoaded = 'DOMContentLoaded',
+        scripts = document.getElementsByTagName('script'), contentLoaded = 'DOMContentLoaded', domLoaded = false,
         cache = {}, queue = {}, emptyFn = function(){},
         success, error, complete,
         scriptCounter, loadedCounter, errorCounter, files;
@@ -41,8 +41,6 @@
     * @return Require
     */   
     require = function(params){
-        var i,j;
-        
         strictFiles = params.strict || false;
         async = params.async || true;               
         files = params.files instanceof Array ? params.files : [params.files];
@@ -51,55 +49,72 @@
         complete = params.complete || emptyFn;
         scriptCounter = loadedCounter = errorCounter = 0;
         queue = {};
-        
-        document.addEventListener(contentLoaded, function parse(){
-            document.removeEventListener(contentLoaded, parse, false);
 
-            for(j in scripts){
-                if(scripts.hasOwnProperty(j)){
-                    if(scripts[j].src){
-                        cache[getName(scripts[j].src)] = j;
-                    }
-                }
-            }
+        if(domLoaded){
+            parse();
+        }else{
+            document.addEventListener(contentLoaded, function fn(){
+                parse();
+                document.removeEventListener(contentLoaded, fn, false);
+            });
+        }
 
-            for(i in files){
-                if(files.hasOwnProperty(i)){                
-                    var file, script,
-                        callback = emptyFn, 
-                        obj = null;
-                    
-                    if(files[i] instanceof Array){
-                        file = files[i][0];
-                        script = getName(files[i][0]);
-                        
-                        if(typeof files[i][1] === "string"){
-                            obj = files[i][1];
-                        }else{
-                            callback = files[i][1];
-                        }
-                        
-                        obj = obj || files[i][2] || null;
-                    }else{
-                        file = files[i];
-                        script = getName(files[i]);
-                    }
-
-                    if(typeof cache[script] !== "undefined" || typeof queue[script] !== "undefined"){
-                        continue;
-                    }
-                    
-                    create(file, i, callback, obj);
-                    scriptCounter++;
-                }
-            }
-
-            if(scriptCounter === 0){
-                complete();
-                success();
-            }
-        });
     };
+
+    /* 
+     * function parse
+     *
+     * Parse all scripts from body and add them to cache.
+     * Parse all required files to load them if they don't exists   
+     * @return void 
+     */
+    function parse(){
+        var i,j;
+
+        for(j in scripts){
+            if(scripts.hasOwnProperty(j)){
+                if(scripts[j].src){
+                    cache[getName(scripts[j].src)] = j;
+                }
+            }
+        }
+
+        for(i in files){
+            if(files.hasOwnProperty(i)){                
+                var file, script,
+                    callback = emptyFn, 
+                    obj = null;
+                
+                if(files[i] instanceof Array){
+                    file = files[i][0];
+                    script = getName(files[i][0]);
+                    
+                    if(typeof files[i][1] === "string"){
+                        obj = files[i][1];
+                    }else{
+                        callback = files[i][1];
+                    }
+                    
+                    obj = obj || files[i][2] || null;
+                }else{
+                    file = files[i];
+                    script = getName(files[i]);
+                }
+
+                if(typeof cache[script] !== "undefined" || typeof queue[script] !== "undefined"){
+                    continue;
+                }
+                
+                create(file, i, callback, obj);
+                scriptCounter++;
+            }
+        }
+
+        if(scriptCounter === 0){
+            complete();
+            success();
+        }
+    }
     
     /*
      * function create
@@ -193,6 +208,11 @@
         
         return true;
     }
+
+    document.addEventListener(contentLoaded, function dl(){
+        domLoaded = true;
+        document.removeEventListener(contentLoaded, dl, false);
+    });
     
     window.require = require;
     
