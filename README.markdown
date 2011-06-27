@@ -1,6 +1,6 @@
 Require.js
 ==========
-A tiny javascript/javascript template loader with cache control.
+A tiny javascript loader with cache control.
 
 How to
 ------
