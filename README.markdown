@@ -19,17 +19,16 @@ Simplely add *require.js* in your project and load it.
         //optional
         complete : function(){
             //do something extraordinary when all files parsed
-        },
-        //optional
-        error : function(){
-            //do something bad when a file can't be loaded
-        },
-        //optional
-        strict : true //two files with same name can't be loaded. Even in different dir.
+        }
     });
 
 Version
 -------
+#### 0.6
+* Change : rewrite 80% of the code. Now 1kb and 5b with gzip.
+* Remove : strict and error parametters
+* Fix : File object name not working properply
+
 #### 0.5.3
 * Bugfix : main function not runing (oups bug)
 * Change : domLoad event checked at first run.

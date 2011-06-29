@@ -1,25 +1,16 @@
-//     require.js 0.5.3
+//     require.js 0.6
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
-(function(){
-    
-    //check if already defined
-    if(window.require){ return; }
+!function(environment){
 
     // Initial Setup
     // -------------
-    var require,
+    var require, _parseScripts, _parseFiles, _create, _countFiles,
+        domLoaded = false, doc = document, undef = "undefined",
+        emptyFn = function(){}, cache = {}, scriptCounter = 0, errorCounter = 0,
+        domCheck, success, complete, files, scripts;
 
-        //Configurable var
-        strictFiles = true,
-        async = false,
-         
-        scripts = document.getElementsByTagName('script'), contentLoaded = 'DOMContentLoaded', domLoaded = false,
-        cache = {}, queue = {}, emptyFn = function(){},
-        success, error, complete,
-        scriptCounter, loadedCounter, errorCounter, files;
-        
     /*
     * require
     * Load all files list in object
@@ -27,94 +18,82 @@
     * params is an object which contain all informations for require.
     * {
     *   'files' : [
-    *       ['filename', callback] 
-    *       or 
     *       'filename'
+    *       or
+    *       ['filename', callback] 
+    *       or
+    *       ['filename', 'loaded object', callback] 
     *   ],
     *   complete    function    launched when all files script are created
     *   success     function    launched when all files are successfully loaded
-    *   error       function    launched when file can't be loaded,
-    *   strict      boolean     use strict mode
-    *   async       boolean     use async mode
     * }
     * 
     * @return Require
     */   
-    require = function(params){
-        strictFiles = params.strict || false;
-        async = params.async || true;               
-        files = params.files instanceof Array ? params.files : [params.files];
+    require = function(params){      
+        files = !!params.files.pop ? params.files : [params.files];
         success = params.success || emptyFn;
-        error = params.error || emptyFn;
         complete = params.complete || emptyFn;
-        scriptCounter = loadedCounter = errorCounter = 0;
-        queue = {};
+        scriptCounter = errorCounter = 0;
 
-        if(domLoaded){
-            parse();
-        }else{
-            document.addEventListener(contentLoaded, function fn(){
-                parse();
-                document.removeEventListener(contentLoaded, fn, false);
-            });
-        }
+        if(domLoaded) return _parseFiles();
 
+        setTimeout(domCheck = function(){
+            if(!doc.body) return setTimeout(domCheck, 1);
+
+            domLoaded = true;
+            _parseScripts();
+            _parseFiles();
+        }, 1);
     };
 
     /* 
-     * function parse
+     * function _parseScript
      *
      * Parse all scripts from body and add them to cache.
-     * Parse all required files to load them if they don't exists   
+     * 
      * @return void 
      */
-    function parse(){
-        var i,j;
+    _parseScripts = function(){
+        var scripts = doc.getElementsByTagName('script'), i;
 
-        for(j in scripts){
-            if(scripts.hasOwnProperty(j)){
-                if(scripts[j].src){
-                    cache[getName(scripts[j].src)] = j;
-                }
+        for(i in scripts){
+            if(parseInt(i) && !!scripts[i].src){
+                cache[scripts[i].src] = i;
             }
         }
+    };
 
-        for(i in files){
-            if(files.hasOwnProperty(i)){                
-                var file, script,
-                    callback = emptyFn, 
-                    obj = null;
-                
-                if(files[i] instanceof Array){
-                    file = files[i][0];
-                    script = getName(files[i][0]);
-                    
-                    if(typeof files[i][1] === "string"){
-                        obj = files[i][1];
-                    }else{
-                        callback = files[i][1];
-                    }
-                    
-                    obj = obj || files[i][2] || null;
-                }else{
-                    file = files[i];
-                    script = getName(files[i]);
-                }
+    /* 
+     * function _parseFiles
+     *
+     * Parse all required files to load them if they don't exists   
+     *
+     * @return void 
+     */
+    _parseFiles = function(){
+        var i,j, file, callback = emptyFn, obj = null;
 
-                if(typeof cache[script] !== "undefined" || typeof queue[script] !== "undefined"){
-                    continue;
-                }
-                
-                create(file, i, callback, obj);
-                scriptCounter++;
-            }
+        for(i in files){        
+            !!files[i].pop ? 
+                (file = files[i][0]) :
+                (file = files[i]);
+            
+            (!!files[i].pop && files[i][1][0]) ? 
+                (obj = files[i][2] || files[i][1]) : 
+                (!!files[i].pop ? callback = files[i][1] : null );
+
+            if(!!cache[file]) continue;
+
+            _create(file, i, callback, obj);
+            scriptCounter++;
         }
 
-        if(scriptCounter === 0){
+        if(!scriptCounter){
             complete();
             success();
         }
-    }
+    };
     
     /*
      * function create
@@ -125,66 +104,30 @@
      * @param   obj       the object loaded in file
      * @return  void
      */
-    function create(file, index, callback, obj){
-        var script = document.createElement('script'),
-            fileName = getName(file);
+    _create = function(file, index, callback, obj){
+        var script = doc.createElement('script');
         
-        script.onload = script.onerror = function(event){
-            var t, i;
+        script.onload = script.onerror = function(e){
+            var t, i, error = false;
             
-            if(event.type === "error"){
-                errorCounter++;
-                error(event, file);
-            }else{
-                callback();
-            }            
-            
-            if(obj !== null){
-                t = setInterval(function(){
-                    if(typeof eval('window.'+obj) !== "undefined"){
-                        countFiles(file, index);
-                        clearInterval(t);
-                    }else if(i > 10){
-                        errorCounter++;
-                        error(obj, file);
-                        countFiles(file, index);
-                        clearInterval(t);
-                    }
-                    
-                    i++;
+            error = (e.type == "error") ? ++errorCounter : error;
+
+            if(obj && !error){
+                //wait the javascript to be parsed to controll if object exists
+                setTimeout(t = function(){
+                    (!!eval('window.'+obj)) ? _countFiles(file, index, callback) : setTimeout(t, 10);
+                    (i > 10) ? ++errorCounter+--scriptCounter : i++;
                 }, 10);
-            }else{
-                countFiles(file, index);
+            }else if(!error){   
+                _countFiles(file, index, callback);
             }
-            
-            return true;
         };
         
-        queue[fileName] = index;
-        
-        script.async = async;
+        script.async = true;
         script.src = file;
         
-        document.body.appendChild(script);
-    }
-   
-    /*
-     * function getName
-     * get script name
-     * @param file : the file uri
-     * @param strict : force strict mode
-     * @return the script name
-     */
-    function getName(file, strict){
-        strict = strict || strictFiles;
-        
-        var name = file.toString().split('/').pop();
-        name = name.split('.');
-        name.pop();
-        name = name.join('-');
-
-        return strictFiles || strict ? name : file;
-    }
+        doc.body.appendChild(script);
+    };
     
     /*
      * function countFiles
@@ -193,27 +136,18 @@
      * @param index
      * @return void
      */
-    function countFiles(file, index){        
-        loadedCounter++;
-        delete queue[getName(file)];
-        cache[getName(file)] = index;
+    _countFiles = function(file, index, callback){
+        cache[file] = index;
+        callback();
 
-        if(loadedCounter === scriptCounter){
+        if(!--scriptCounter){
             complete();
 
-            if(errorCounter === 0){
-                success();
-            }
+            if(!errorCounter) success();
         }
-        
-        return true;
-    }
-
-    document.addEventListener(contentLoaded, function dl(){
-        domLoaded = true;
-        document.removeEventListener(contentLoaded, dl, false);
-    });
+    };
     
-    window.require = require;
+    typeof module != undef && module.exports ? 
+    (modules.exports.require = require) : (environment.require = require);
     
-})();
+}(this);
