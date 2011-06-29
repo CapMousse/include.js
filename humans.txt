@@ -1,12 +1,12 @@
 /* TEAM */
 	Creator: Jérémy Barbe
-	url: http://CapMousse.gitbub.com/require.js
+	url: http://www.capitaine-mousse.Fr
 	Contact: contact [at] jeremybarbe.fr
 	Twitter: @capitainemousse
 	From: Troyes, Aube, France
 
 /* SITE */
-	Last update: 2011/06/26
+	Last update: 2011/06/29
 	Language: English
 	Doctype: HTML5
 	IDE: Sublime Text 2, Wamp, Chrome (Yslow, SpeedTracer)

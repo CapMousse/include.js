@@ -27,7 +27,7 @@
 	</header>
 	<section id="main" role="main">
 		<article>
-		<p>Require.js is a tiny javascript loader (1.4k) with cache control, so your not going to load a script already loaded.</p>
+		<p>Require.js is a tiny javascript loader (.5kb gzipped) with cache control, so your not going to load a script already loaded.</p>
 		<p>Just place it in the head of your document with the list of all files needed to accelerate your page loading.</p>
 		<h1>Usage</h1>
 		<p>Insert Require.js in the head/body end of your document. You need to pass an object with all infos needed to do the magic :</p>
@@ -35,8 +35,6 @@
     files : array of files,
     success : optional function launched when all files are successfully loaded,
     complete : optional function launched when all files are parsed,
-    error : optional function launched when a file cannot be loaded ,
-    strict : optional boolean
 });</pre>
 		<p>A file can be represented by a string (path to the file) or an other array wich contain the file path, a callback function when the file is loaded and optionally the object name to be loaded.</p>
 		<pre class="prettyprint">[
