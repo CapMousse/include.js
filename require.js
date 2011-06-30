@@ -110,7 +110,7 @@
         script.onload = script.onerror = function(e){
             var t, i, error = false;
             
-            error = (e.type == "error") ? ++errorCounter : error;
+            error = (e.type == "error") ? ++errorCounter+scriptCounter-- : error;
 
             if(obj && !error){
                 //wait the javascript to be parsed to controll if object exists
