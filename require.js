@@ -38,13 +38,13 @@
 
         if(domLoaded) return _parseFiles();
 
-        setTimeout(domCheck = function(){
+        (domCheck = function(){
             if(!doc.body) return setTimeout(domCheck, 1);
 
             domLoaded = true;
             _parseScripts();
             _parseFiles();
-        }, 1);
+        })();
     };
 
     /* 
@@ -58,7 +58,7 @@
         var scripts = doc.getElementsByTagName('script'), i;
 
         for(i in scripts){
-            if(parseInt(i) && !!scripts[i].src){
+            if(!!scripts[i].src){
                 cache[scripts[i].src] = i;
             }
         }
@@ -83,10 +83,10 @@
                 (obj = files[i][2] || files[i][1]) : 
                 (!!files[i].pop ? callback = files[i][1] : null );
 
-            if(!!cache[file]) continue;
-
-            _create(file, i, callback, obj);
-            scriptCounter++;
+            if(!cache[file]){
+                _create(file, i, callback, obj);
+                scriptCounter++;
+            }
         }
 
         if(!scriptCounter){
@@ -114,10 +114,10 @@
 
             if(obj && !error){
                 //wait the javascript to be parsed to controll if object exists
-                setTimeout(t = function(){
+                (t = function(){
                     (!!eval('window.'+obj)) ? _countFiles(file, index, callback) : setTimeout(t, 10);
                     (i > 10) ? ++errorCounter+--scriptCounter : i++;
-                }, 10);
+                })();
             }else if(!error){   
                 _countFiles(file, index, callback);
             }
