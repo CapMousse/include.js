@@ -28,6 +28,7 @@ Version
 * Change : rewrite 80% of the code. Now 1kb and 5b with gzip.
 * Remove : strict and error parametters
 * Fix : File object name not working properply
+* Fix : Remove unused var
 
 #### 0.5.3
 * Bugfix : main function not runing (oups bug)

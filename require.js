@@ -7,7 +7,7 @@
     // Initial Setup
     // -------------
     var require, _parseScripts, _parseFiles, _create, _countFiles,
-        domLoaded = false, doc = document, undef = "undefined",
+        doc = document, undef = "undefined",
         emptyFn = function(){}, cache = {}, scriptCounter = 0, errorCounter = 0,
         domCheck, success, complete, files, scripts;
 
@@ -36,12 +36,9 @@
         complete = params.complete || emptyFn;
         scriptCounter = errorCounter = 0;
 
-        if(domLoaded) return _parseFiles();
-
         (domCheck = function(){
             if(!doc.body) return setTimeout(domCheck, 1);
 
-            domLoaded = true;
             _parseScripts();
             _parseFiles();
         })();
