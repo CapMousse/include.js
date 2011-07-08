@@ -16,15 +16,15 @@
     </script>
     <script src="scripts/require-min.js"></script>
     <script>
-        require({
-            files: [
-                "scripts/underscore.js",
-                "scripts/jquery.js",
-                "scripts/backbone.js",
-                "scripts/backbone.template.js",
-                "scripts/backbone.app.js"
-            ]
-        })
+        require([
+            "scripts/underscore.js",
+            "scripts/jquery.js",
+            "scripts/backbone.js",
+            "scripts/backbone.template.js",
+            "scripts/backbone.app.js"
+        ], function(){
+            $('#exemple').html('Jquery loaded!')
+        });
     </script>
 </head>
 <body role="document" class="clearfix">
@@ -32,5 +32,6 @@
         <h1>Require in head</h1>
         <p>Time to load : <span id="time"></span> ms</p>
     </section>
+    <section id="exemple"></section>
 </body>
 </html>
