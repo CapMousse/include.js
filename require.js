@@ -1,4 +1,4 @@
-//     require.js 0.6
+//     require.js 0.7
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -9,31 +9,27 @@
     var require, _parseScripts, _parseFiles, _create, _countFiles,
         doc = document, undef = "undefined",
         emptyFn = function(){}, cache = {}, scriptCounter = 0, errorCounter = 0,
-        domCheck, success, complete, files, scripts;
+        domCheck, success, files, scripts;
 
-    /*
-    * require
-    * Load all files list in object
-    * @param    params   object
-    * params is an object which contain all informations for require.
-    * {
-    *   'files' : [
-    *       'filename'
-    *       or
-    *       ['filename', callback] 
-    *       or
-    *       ['filename', 'loaded object', callback] 
-    *   ],
-    *   complete    function    launched when all files script are created
-    *   success     function    launched when all files are successfully loaded
-    * }
-    * 
-    * @return Require
-    */   
-    require = function(params){      
-        files = !!params.files.pop ? params.files : [params.files];
-        success = params.success || emptyFn;
-        complete = params.complete || emptyFn;
+    /**
+     * require
+     * Load all files list in object
+     * @param    array   array of files to be loaded
+     *   [
+     *       'filename'
+     *       or
+     *       ['filename', callback] 
+     *       or
+     *       ['filename', 'loaded object', callback] 
+     *   ]
+     * 
+     * @params  callback    function launched when all files are loaded
+     * 
+     * @return   void
+    **/   
+    require = function(array, callback){      
+        files = !!array.pop ? array : [array];
+        success = callback || emptyFn;
         scriptCounter = errorCounter = 0;
 
         (domCheck = function(){
@@ -71,7 +67,7 @@
     _parseFiles = function(){
         var i,j, file, callback = emptyFn, obj = null;
 
-        for(i in files){        
+        for(i in files){
             !!files[i].pop ? 
                 (file = files[i][0]) :
                 (file = files[i]);
@@ -86,8 +82,7 @@
             }
         }
 
-        if(!scriptCounter){
-            complete();
+        if(!scriptCounter){ 
             success();
         }
     };
@@ -137,10 +132,8 @@
         cache[file] = index;
         callback();
 
-        if(!--scriptCounter){
-            complete();
-
-            if(!errorCounter) success();
+        if(!--scriptCounter && !errorCounter){ 
+            success();
         }
     };
     

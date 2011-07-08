@@ -6,24 +6,22 @@ How to
 ------
 Simplely add *require.js* in your project and load it.
 
-    require({
-        files : [
-            'script1.js',
-            ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}],
-            ['other/js/script3.js', 'ObjectInFile'],
-            ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}, 'OjectInFile']
-        ],
-        success : function(){
-            //do something extraordinary when all files successfuly loaded
-        },
-        //optional
-        complete : function(){
-            //do something extraordinary when all files parsed
-        }
+    require([
+        'script1.js',
+        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}],
+        ['other/js/script3.js', 'ObjectInFile'],
+        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}, 'OjectInFile']
+    ], function(){
+        //do something extraordinary when all files successfuly loaded
     });
 
 Version
 -------
+#### 0.7
+* Change : Drop complete callback
+* Change : Perf and compression improvement
+* Fix : Already loaded script can be reloaded
+
 #### 0.6
 * Change : rewrite 80% of the code. Now 1kb and 5b with gzip.
 * Remove : strict and error parametters
