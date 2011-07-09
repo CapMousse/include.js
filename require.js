@@ -74,7 +74,7 @@
             
             (!!files[i].pop && files[i][1][0]) ? 
                 (obj = files[i][2] || files[i][1]) : 
-                (!!files[i].pop ? callback = files[i][1] : null );
+                (!!files[i].pop ? callback = files[i][1] : emptyFn );
 
             if(!cache[file]){
                 _create(file, i, callback, obj);
