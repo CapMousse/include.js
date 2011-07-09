@@ -118,8 +118,17 @@ blockquote{
 
 /** FONTS **/
 
+#ie{
+  background: red;
+  color: white;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
+
 body{
-  max-width: 600px;
+  max-width: 400px;
   width: 100%;
   padding: 0 20px;
   margin: 20px auto 0 auto;
@@ -133,10 +142,6 @@ body nav a:link, body nav a:visited, body nav a:active{
   color: white;
 }
 
-body header{
-  margin-left: 160px;
-}
-
 body header h1{
   -moz-transform:rotate(-90deg);
   -webkit-transform:rotate(-90deg);
@@ -144,7 +149,7 @@ body header h1{
   -ms-transform:rotate(-90deg);
   width: 460px;
   height: 200px;
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   font-size: 8em;
@@ -154,19 +159,24 @@ body header h1{
   color: #00AAFF;
 }
 
+.ie8 h1, .ie7 h1{
+  margin-left: 0px;
+}
+
 body h2{
   font-size: 2em;
   color: #777;
 }
 
 #main, body > footer{
-  padding-left: 160px;
+  position: relative;
+  z-index: 1;
   margin: 0 auto;
   text-align: justify;
 }
 
-section > article{
-  margin-bottom: 4em;
+body > footer{
+  margin-bottom: 10px;
 }
 
 form input{
