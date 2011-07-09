@@ -102,13 +102,13 @@
         script.onload = script.onerror = function(e){
             var t, i, error = false;
             
-            error = (e.type == "error") ? ++errorCounter+scriptCounter-- : error;
+            error = (e.type == "error") ? ++errorCounter : error;
 
             if(obj && !error){
                 //wait the javascript to be parsed to controll if object exists
                 (t = function(){
                     (!!eval('window.'+obj)) ? _countFiles(file, index, callback) : setTimeout(t, 10);
-                    (i > 10) ? ++errorCounter+--scriptCounter : i++;
+                    (i > 10) ? ++errorCounter : i++;
                 })();
             }else if(!error){   
                 _countFiles(file, index, callback);
