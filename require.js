@@ -6,8 +6,8 @@
 
     // Initial Setup
     // -------------
-    var require, _parseScripts, _parseFiles, _create, _countFiles,
-        doc = document, undef = "undefined",
+    var require, _create, _countFiles,
+        doc = document, body = "body",
         emptyFn = function(){}, cache = {}, scriptCounter = 0, errorCounter = 0,
         domCheck, success, files, scripts;
 
@@ -27,64 +27,42 @@
      * 
      * @return   void
     **/   
-    require = function(array, callback){      
+    require = function(array, callback){
+        var i, j, file, fileCallback = emptyFn , obj = 0;
         files = !!array.pop ? array : [array];
         success = callback || emptyFn;
         scriptCounter = errorCounter = 0;
 
         (domCheck = function(){
-            if(!doc.body) return setTimeout(domCheck, 1);
+            if(!doc[body]) return setTimeout(domCheck, 1);
 
-            _parseScripts();
-            _parseFiles();
+            scripts = doc.getElementsByTagName('script');
+
+            for(i in scripts){
+                if(!!scripts[i].src){
+                    cache[scripts[i].src] = i;
+                }
+            }
+
+            for(i in files){
+                if(!!files[i].pop){
+                    file = files[i][0];
+                    fileCallback = files[i][1] || fileCallback;
+                    obj = files[i][2] || obj;
+                }else{
+                    file = files[i]
+                }
+
+                if(!cache[file]){
+                    _create(file, i, fileCallback, obj);
+                    scriptCounter++;
+                }
+            }
+
+            if(!scriptCounter){ 
+                success();
+            }
         })();
-    };
-
-    /* 
-     * function _parseScript
-     *
-     * Parse all scripts from body and add them to cache.
-     * 
-     * @return void 
-     */
-    _parseScripts = function(){
-        var scripts = doc.getElementsByTagName('script'), i;
-
-        for(i in scripts){
-            if(!!scripts[i].src){
-                cache[scripts[i].src] = i;
-            }
-        }
-    };
-
-    /* 
-     * function _parseFiles
-     *
-     * Parse all required files to load them if they don't exists   
-     *
-     * @return void 
-     */
-    _parseFiles = function(){
-        var i,j, file, callback = emptyFn, obj = null;
-
-        for(i in files){
-            !!files[i].pop ? 
-                (file = files[i][0]) :
-                (file = files[i]);
-            
-            (!!files[i].pop && files[i][1][0]) ? 
-                (obj = files[i][2] || files[i][1]) : 
-                (!!files[i].pop ? callback = files[i][1] : emptyFn );
-
-            if(!cache[file]){
-                _create(file, i, callback, obj);
-                scriptCounter++;
-            }
-        }
-
-        if(!scriptCounter){ 
-            success();
-        }
     };
     
     /*
@@ -118,7 +96,7 @@
         script.async = true;
         script.src = file;
         
-        doc.body.appendChild(script);
+        doc[body].appendChild(script);
     };
     
     /*
@@ -132,12 +110,12 @@
         cache[file] = index;
         callback();
 
-        if(!--scriptCounter && !errorCounter){ 
+        if(!--scriptCounter && !errorCounter){
             success();
         }
     };
     
-    typeof module != undef && module.exports ? 
+    typeof module != "undefined" && module.exports ? 
     (modules.exports.require = require) : (environment.require = require);
     
 }(this);

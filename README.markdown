@@ -8,8 +8,7 @@ Simplely add *require.js* in your project and load it.
 
     require([
         'script1.js',
-        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}],
-        ['other/js/script3.js', 'ObjectInFile'],
+        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}]
         ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}, 'OjectInFile']
     ], function(){
         //do something extraordinary when all files successfuly loaded
@@ -17,6 +16,11 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 0.8
+Require.js is now under 500kb !
+* Change : normalize file parameter (name, callback, waited object)
+* Change : Speed up the core
+
 #### 0.7
 * Change : Drop complete callback
 * Change : Perf and compression improvement
