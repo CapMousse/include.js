@@ -21,10 +21,14 @@
         <h1>Javascript in body</h1>
         <p>Time to load : <span id="time"></span> ms</p>
     </section>
+    <section id="exemple"></section>
     <script src="scripts/underscore.js"></script>
     <script src="scripts/jquery.js"></script>
     <script src="scripts/backbone.js"></script>
-    <script src="scripts/backbone.template.js"></script>
-    <script src="scripts/backbone.app.js"></script> 
+    <script>
+        $(function(){
+            $('#exemple').html('Jquery loaded!')
+        })
+    </script>
 </body>
 </html>
