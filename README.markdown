@@ -17,7 +17,7 @@ Simplely add *require.js* in your project and load it.
 Version
 -------
 #### 0.8
-Require.js is now under 500kb !
+* Change : now under 500kb !
 * Change : normalize file parameter (name, callback, waited object)
 * Change : Speed up the core
 
