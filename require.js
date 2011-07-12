@@ -9,7 +9,7 @@
     var require, _create, _countFiles,
         doc = document, body = "body",
         emptyFn = function(){}, cache = {}, scriptCounter = 0, errorCounter = 0,
-        domCheck, success, files, scripts;
+        domCheck, success, files;
 
     /**
      * require
@@ -28,7 +28,7 @@
      * @return   void
     **/   
     require = function(array, callback){
-        var i, j, file, fileCallback = emptyFn , obj = 0;
+        var i, j, file, fileCallback = emptyFn , obj = 0, scripts;
         files = !!array.pop ? array : [array];
         success = callback || emptyFn;
         scriptCounter = errorCounter = 0;
@@ -107,7 +107,6 @@
      * @return void
      */
     _countFiles = function(file, index, callback){
-        cache[file] = index;
         callback();
 
         if(!--scriptCounter && !errorCounter){
