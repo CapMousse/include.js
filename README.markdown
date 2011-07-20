@@ -16,6 +16,10 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 0.8.1
+* Change : change method to test if object exists
+* Change : File callback is called even if file is in cache
+
 #### 0.8
 * Change : normalize file parameter (name, callback, waited object)
 * Change : Speed up the core

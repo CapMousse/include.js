@@ -56,6 +56,8 @@
                 if(!cache[file]){
                     _create(file, i, fileCallback, obj);
                     scriptCounter++;
+                }else{
+                    fileCallback();
                 }
             }
 
@@ -85,7 +87,7 @@
             if(obj && !error){
                 //wait the javascript to be parsed to controll if object exists
                 (t = function(){
-                    (!!eval('window.'+obj)) ? _countFiles(file, index, callback) : setTimeout(t, 10);
+                    (obj in environment) ? _countFiles(file, index, callback) : setTimeout(t, 10);
                     (i > 10) ? ++errorCounter : i++;
                 })();
             }else if(!error){   
