@@ -22,7 +22,7 @@
     var require = function(array, callback){
         var i, j, file, obj, scripts, _create, _countFiles, domCheck, success, files,
         doc = document, body = "body",
-        emptyFn = function(){}, fileCallback = emptyFn , cache = {}, scriptCounter = 0, errorCounter = 0;
+        emptyFn = function(){}, fileCallback = emptyFn , cache = {}, scriptCounter = 0, errorCounter = 0, time = 10;
 
         files = !array.pop ? [array] : array;
         success = callback || emptyFn;
@@ -36,24 +36,27 @@
          * @param   obj       the object loaded in file
          * @return  void
          */
-        _create = function(file, index, callback, obj){
+        _create = function(file, callback, obj){
             var script = doc.createElement('script');
             
             scriptCounter++;
             
             script.onload = script.onerror = function(e){
-                var t, i, error = false;
+                var t, i, error = 0;
                 
                 error = (e.type == "error") ? ++errorCounter : error;
 
-                if(obj && !error){
-                    //wait the javascript to be parsed to controll if object exists
-                    (t = function(){
-                        (obj in environment) ? _countFiles(file, index, callback) : setTimeout(t, 10);
-                        (i > 10) ? ++errorCounter : i++;
-                    })();
-                }else if(!error){ 
-                    _countFiles(file, index, callback);
+
+                if(!error){
+                    if(!obj){
+                        _countFiles(callback);
+                    }else{
+                        //wait the javascript to be parsed to controll if object exists
+                        (t = function(){
+                            (obj in environment) ? _countFiles(callback) : setTimeout(t, time);
+                            (i > time) ? errorCounter++ : i++;
+                        })();
+                    }
                 }
             };
             
@@ -67,10 +70,9 @@
          * function countFiles
          * count files loaded and launch callback
          * @param file
-         * @param index
          * @return void
          */
-        _countFiles = function(file, index, callback){
+        _countFiles = function(callback){
             callback();
 
             if(!--scriptCounter && !errorCounter){
@@ -81,7 +83,7 @@
 
 
         (domCheck = function(){
-            if(!doc[body]) return setTimeout(domCheck, 1);
+            if(!doc[body]) return setTimeout(domCheck, time);
 
             scripts = doc.getElementsByTagName('script');
 
@@ -101,7 +103,7 @@
                 }
 
                 (!cache[file]) ?
-                    (_create(file, i, fileCallback, obj)): 
+                    (_create(file, fileCallback, obj)): 
                     (fileCallback());
             }
 
