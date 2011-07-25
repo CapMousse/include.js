@@ -20,7 +20,7 @@
      * @return   void
     **/   
     var require = function(array, callback){
-        var i, j, file, obj, scripts, _create, _countFiles, domCheck, success, files,
+        var i, j, file, obj, scripts, success, files,
         doc = document, body = "body",
         emptyFn = function(){}, fileCallback = emptyFn , cache = {}, scriptCounter = 0, errorCounter = 0, time = 10;
 
@@ -36,7 +36,7 @@
          * @param   obj       the object loaded in file
          * @return  void
          */
-        _create = function(file, callback, obj){
+        function _create(file, callback, obj){
             var script = doc.createElement('script');
             
             scriptCounter++;
@@ -72,7 +72,7 @@
          * @param file
          * @return void
          */
-        _countFiles = function(callback){
+        function _countFiles(callback){
             callback();
 
             if(!--scriptCounter && !errorCounter){
@@ -82,7 +82,7 @@
 
 
 
-        (domCheck = function(){
+        (function domCheck(){
             if(!doc[body]) return setTimeout(domCheck, time);
 
             scripts = doc.getElementsByTagName('script');
