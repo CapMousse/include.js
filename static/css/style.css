@@ -159,8 +159,12 @@ body header h1{
   color: #00AAFF;
 }
 
-.ie8 h1, .ie7 h1{
-  margin-left: 0px;
+.ie8 header h1, .ie7 header h1{
+  position: static;
+  font-size: 80px;
+  line-height: 100%;
+  height: auto;
+  margin: 0;
 }
 
 body h2{
