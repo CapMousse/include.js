@@ -44,7 +44,6 @@
             script.onload = script.onerror = script.onreadystatechange = function(){
                 var t, i, detected, error = 0;
                 
-                console.log(error);
                 error = (this.type == "error") ? ++errorCounter : error;
 
 
