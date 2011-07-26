@@ -11,9 +11,9 @@
     <script>
         // calculate difference between zero and window.onload
         var now = new Date();
-        document.addEventListener('DOMContentLoaded', function() {
+        window.onload = function() {
             document.getElementById("time").innerHTML = (new Date()).getTime() - now.getTime();   
-        }, false);
+        };
     </script>
 </head>
 <body role="document" class="clearfix">

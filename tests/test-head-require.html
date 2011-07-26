@@ -10,9 +10,9 @@
     <title>Javascript head test</title>
     <script>
         var now = new Date();
-        document.addEventListener('DOMContentLoaded', function() {
+        window.onload = function() {
             document.getElementById("time").innerHTML = (new Date()).getTime() - now.getTime();   
-        }, false);
+        };
     </script>
     <script src="scripts/require-min.js"></script>
     <script>
