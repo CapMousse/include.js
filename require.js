@@ -59,8 +59,6 @@
                     }
                 }
             };
-
-            console.log(script.onload);
             
             script.async = true;
             script.src = file;
