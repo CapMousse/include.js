@@ -41,10 +41,11 @@
             
             scriptCounter++;
             
-            script.onload = script.onerror = function(e){
+            script.onload = script.onerror = script.onreadystatechange = function(){
                 var t, i, detected, error = 0;
                 
-                error = (e.type == "error") ? ++errorCounter : error;
+                console.log(error);
+                error = (this.type == "error") ? ++errorCounter : error;
 
 
                 if(!error){
@@ -59,6 +60,8 @@
                     }
                 }
             };
+
+            console.log(script.onload);
             
             script.async = true;
             script.src = file;
