@@ -3,7 +3,7 @@
 //     May be freely distributed under the MIT license.
 
 !function(environment){
-    /**
+    /*
      * require
      * Load all files list in object
      * @param    array   array of files to be loaded
@@ -20,9 +20,9 @@
      * @return   void
     **/   
     var require = function(array, callback){
-        var i, j, file, obj, scripts, _create, _countFiles, domCheck, success, files,
-        doc = document, body = "body",
-        emptyFn = function(){}, fileCallback = emptyFn , cache = {}, scriptCounter = 0, errorCounter = 0, time = 10;
+        var i, j, file, obj, scripts, success, files,
+        doc = document, body = "body", emptyFn = function(){}, 
+        fileCallback = emptyFn , cache = {}, scriptCounter = 0, errorCounter = 0, time = 10;
 
         files = !array.pop ? [array] : array;
         success = callback || emptyFn;
@@ -36,13 +36,13 @@
          * @param   obj       the object loaded in file
          * @return  void
          */
-        _create = function(file, callback, obj){
+        function _create(file, callback, obj){
             var script = doc.createElement('script');
             
             scriptCounter++;
             
             script.onload = script.onerror = function(e){
-                var t, i, error = 0;
+                var t, i, detected, error = 0;
                 
                 error = (e.type == "error") ? ++errorCounter : error;
 
@@ -72,17 +72,19 @@
          * @param file
          * @return void
          */
-        _countFiles = function(callback){
+        function _countFiles(callback){
             callback();
 
             if(!--scriptCounter && !errorCounter){
                 success();
             }
+
+            return true;
         };
 
 
 
-        (domCheck = function(){
+        (function domCheck(){
             if(!doc[body]) return setTimeout(domCheck, time);
 
             scripts = doc.getElementsByTagName('script');
