@@ -16,6 +16,13 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 0.9
+* Fix : huge crash in IE8 & before
+* Change : Move huge part of code
+* Change : file size
+* Change : remove unsused vars
+* Change : remove return
+
 #### 0.8.2
 * Change : perf & compression improvement
 

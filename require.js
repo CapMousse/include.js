@@ -1,4 +1,4 @@
-//     require.js 0.8.2
+//     require.js 0.9
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -22,7 +22,7 @@
     var require = function(array, callback){
         var i, j, file, obj, scripts, success, files,
         doc = document, body = "body", emptyFn = function(){}, 
-        fileCallback = emptyFn , cache = {}, scriptCounter = 0, errorCounter = 0, time = 10;
+        fileCallback = emptyFn , cache = {}, scriptCounter = 0, time = 10;
 
         files = !array.pop ? [array] : array;
         success = callback || emptyFn;
@@ -37,17 +37,16 @@
          * @return  void
          */
         function _create(file, callback, obj){
-            var script = doc.createElement('script');
+            var script = doc.createElement('script'), complete = 0;
             
             scriptCounter++;
             
-            script.onload = script.onerror = script.onreadystatechange = function(){
-                var t, i, detected, error = 0;
-                
-                error = (this.type == "error") ? ++errorCounter : error;
+            script.onload = script.onreadystatechange = function(e){
+                var t, i;
 
+                if(!complete && (!this.readyState || this.readyState === 'complete')){
+                    complete = 1;
 
-                if(!error){
                     if(!obj){
                         _countFiles(callback);
                     }else{
@@ -75,11 +74,9 @@
         function _countFiles(callback){
             callback();
 
-            if(!--scriptCounter && !errorCounter){
+            if(!--scriptCounter){
                 success();
             }
-
-            return true;
         };
 
 
