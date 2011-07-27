@@ -41,7 +41,7 @@
             
             scriptCounter++;
             
-            script.onload = script.onreadystatechange = function(e){
+            script.onload = script.onreadystatechange = function(){
                 var t, i;
 
                 if(!complete && (!this.readyState || this.readyState === 'complete')){
