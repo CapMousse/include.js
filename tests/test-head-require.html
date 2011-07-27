@@ -14,22 +14,22 @@
             document.getElementById("time").innerHTML = (new Date()).getTime() - now.getTime();   
         };
     </script>
-    <script src="scripts/require-min.js"></script>
-    <script>
+    <script type="text/javascript" src="scripts/require-min.js"></script>
+    <script type="text/javascript">
         require([
             "scripts/underscore.js",
             "scripts/jquery.js",
             "scripts/backbone.js"
         ], function(){
-            $('#exemple').html('Jquery loaded!')
+            $('#exemple').html('jQuery & other files loaded');
         });
     </script>
 </head>
 <body role="document" class="clearfix">
-    <section id="main" role="main">
+    <div id="main" role="main">
         <h1>Require in head</h1>
         <p>Time to load : <span id="time"></span> ms</p>
-    </section>
-    <section id="exemple"></section>
+    </div>
+    <div id="exemple"></div>
 </body>
 </html>
