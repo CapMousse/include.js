@@ -22,7 +22,7 @@
     var require = function(array, callback){
         var i, j, file, obj, scripts, success, files,
         doc = document, body = "body", emptyFn = function(){}, 
-        fileCallback = emptyFn , cache = {}, scriptCounter = 0, time = 10;
+        callbackFile = emptyFn , cache = {}, scriptCounter = 0, time = 10;
 
         files = !array.pop ? [array] : array;
         success = callback || emptyFn;
@@ -36,26 +36,23 @@
          * @param   obj       the object loaded in file
          * @return  void
          */
-        function _create(file, callback, obj){
-            var script = doc.createElement('script'), complete = 0;
-            
+        function _create(file, fileCallback, obj){
+            var script = doc.createElement('script'), complete = 0;     
             scriptCounter++;
             
             script.onload = script.onreadystatechange = function(){
-                var t, i;
+                var t, i = 0;
 
-                if(!complete && (!this.readyState || this.readyState === 'complete')){
+                if(!complete && (!this.readyState || this.readyState === 'loaded')){
                     complete = 1;
 
-                    if(!obj){
-                        _countFiles(callback);
-                    }else{
+                    !obj ?
+                        _countFiles(fileCallback) :
                         //wait the javascript to be parsed to controll if object exists
                         (t = function(){
-                            (obj in environment) ? _countFiles(callback) : setTimeout(t, time);
-                            (i > time) ? errorCounter++ : i++;
+                            (obj in environment) ? _countFiles(fileCallback) : setTimeout(t, time);
+                            (++i>time)&&(t=i);
                         })();
-                    }
                 }
             };
             
@@ -71,12 +68,10 @@
          * @param file
          * @return void
          */
-        function _countFiles(callback){
-            callback();
+        function _countFiles(fileCallback){
+            fileCallback();
 
-            if(!--scriptCounter){
-                success();
-            }
+            !--scriptCounter&&success();
         };
 
 
@@ -87,28 +82,24 @@
             scripts = doc.getElementsByTagName('script');
 
             for(i in scripts){
-                if(!!scripts[i].src){
-                    cache[scripts[i].src] = i;
-                }
+                !!scripts[i].src&&(cache[scripts[i].src] = i)
             }
 
             for(i in files){
                 if(!!files[i].pop){
                     file = files[i][0];
-                    fileCallback = files[i][1] || fileCallback;
+                    callbackFile = files[i][1] || callbackFile;
                     obj = files[i][2] || obj;
                 }else{
                     file = files[i]
                 }
 
-                (!cache[file]) ?
-                    (_create(file, fileCallback, obj)): 
-                    (fileCallback());
+                (cache[file]) ?
+                    (callbackFile()):
+                    (_create(file, callbackFile, obj));
             }
 
-            if(!scriptCounter){ 
-                success();
-            }
+            !scriptCounter&&success();
         })();
     };
     
