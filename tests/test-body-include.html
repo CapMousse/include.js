@@ -1,0 +1,36 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="fr" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="fr" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="fr" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="fr" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="fr"> <!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Javascript head test</title>
+    <script>
+        // calculate difference between zero and window.onload
+        var now = new Date();
+        window.onload = function() {
+            document.getElementById("time").innerHTML = (new Date()).getTime() - now.getTime();   
+        };
+    </script>
+</head>
+<body role="document" class="clearfix">
+    <div id="main" role="main">
+        <h1>include in body</h1>
+        <p>Time to load : <span id="time"></span> ms</p>
+    </div>
+    <div id="exemple"></div>
+    <script src="scripts/include-min.js"></script>
+    <script>
+        include([
+            "scripts/underscore.js",
+            "scripts/jquery.js",
+            "scripts/backbone.js"
+        ], function(){
+            $('#exemple').html('Jquery loaded!')
+        });
+    </script>
+</body>
+</html>
