@@ -1,12 +1,12 @@
-Require.js
+Include.js
 ==========
 A tiny javascript loader with cache control.
 
 How to
 ------
-Simplely add *require.js* in your project and load it.
+Simplely add *Include.js* in your project and load it.
 
-    require([
+    include([
         'script1.js',
         ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}]
         ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}, 'OjectInFile']
@@ -16,6 +16,10 @@ Simplely add *require.js* in your project and load it.
 
 Version
 -------
+#### 1.0
+* Change : project is now called *Include.js*
+* Change : reduce file size
+
 #### 0.9
 * Fix : huge crash in IE8 & before
 * Change : Move huge part of code
@@ -108,4 +112,4 @@ Version
 About
 -----
 Created by [Jérémy Barbe](htt://www.shwaark.com) (c) 2011
-require.js is distributed under the MIT license.
+include.js is distributed under the MIT license.
