@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	
-	<title>Require.js - A tiny javascript loader</title>
+	<title>Include.js - A tiny javascript loader</title>
 	<meta name="description" content="A tiny javascript loader with cache control">
 	<meta name="author" content="Jérémy Barbe">
 	
@@ -27,13 +27,13 @@
     </div>
     <![endif]-->
 	<header>
-		<h1><a href="https://github.com/CapMousse/require.js">Require.js</a></h1>
+		<h1><a href="https://github.com/CapMousse/include.js">Include.js</a></h1>
 		<h2>A tiny javascript loader with cache control</h2>
 	</header>
 	<section id="main" role="main">
 		<article>
-		<p>Require.js is a tiny javascript loader (.5kb gziped) with cache control. Speed up your page loading time with this easy tool.</p>
-		<p>How it speed up your loading time ? Without Require.js you need to download all javascript files when you come on the site. If you have jQuery, jQuery UI... it's more file to wait before your page be "ready". With Require.js, you just have one file to wait before your page be "ready". All other files are loaded after the page.</p>
+		<p>Include.js is a tiny javascript loader (.5kb gziped) with cache control. Speed up your page loading time with this easy tool.</p>
+		<p>How it speed up your loading time ? Without Include.js you need to download all javascript files when you come on the site. If you have jQuery, jQuery UI... it's more file to wait before your page be "ready". With Include.js, you just have one file to wait before your page be "ready". All other files are loaded after the page.</p>
 		<h1>Usage</h1>
 		<p>Insert Require.js in the head/body end of your document. It just need an array of files and  optionally a callback to run :</p>
 		<pre class="prettyprint">require(files, callback);</pre>
@@ -45,36 +45,34 @@
 ]</pre>
 	<h1>Exemple</h1>
     <ul>
-        <li><a href="http://capmousse.github.com/require.js/tests/test-head.html">Javascript in Head</a></li>
-        <li><a href="http://capmousse.github.com/require.js/tests/test-head-require.html">Require in Head</a></li>
-        <li><a href="http://capmousse.github.com/require.js/tests/test-body.html">Javascript in Body</a></li>
-        <li><a href="http://capmousse.github.com/require.js/tests/test-body-require.html">Require in Body</a></li>
+        <li><a href="http://capmousse.github.com/include.js/tests/test-head.html">Javascript in Head</a></li>
+        <li><a href="http://capmousse.github.com/include.js/tests/test-head-include.html">Include in Head</a></li>
+        <li><a href="http://capmousse.github.com/include.js/tests/test-body.html">Javascript in Body</a></li>
+        <li><a href="http://capmousse.github.com/include.js/tests/test-body-include.html">Include in Body</a></li>
     </ul>
     <h1>Download</h1>
     <ul>
-        <li>Documented version : <a href="https://raw.github.com/CapMousse/require.js/master/require.js">require.js</a></li>
-        <li>Minified version : <a href="https://raw.github.com/CapMousse/require.js/master/require-min.js">require-min.js</a></li>
+        <li>Documented version : <a href="https://raw.github.com/CapMousse/Include.js/master/include.js">include.js</a></li>
+        <li>Minified version : <a href="https://raw.github.com/CapMousse/Include.js/master/include-min.js">include-min.js</a></li>
     </ul>
 	</section>
 	<footer>
         <a href="http://www.capitaine-mousse.fr">By Capitaine Mousse / Jérémy Barbe</a>
 	</footer>
-	<a id="link" href="https://github.com/CapMousse/require.js"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on github" /></a>
+	<a id="link" href="https://github.com/CapMousse/include.js"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on github" /></a>
 	
-	<script src="static/js/require.js"></script>
+	<script src="static/js/include-min.js"></script>
 	<script>
-		require('static/js/prettify.js', function(){
-			prettyPrint();
-		});
+		include(
+            [
+                ['static/js/prettify.js', function(){prettyPrint()}],
+                ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
+            ]
+        );
 
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-24455497-1']);
 		_gaq.push(['_trackPageview']);
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
 	</script>
 </body>
 </html>
