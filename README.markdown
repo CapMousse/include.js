@@ -16,6 +16,11 @@ Simplely add *Include.js* in your project and load it.
 
 Version
 -------
+#### 1.0.1
+* Fix : crash if no file callback specified
+* Fix : IE8 Crash 
+* Change : reduce file size
+
 #### 1.0
 * Change : project is now called *Include.js*
 * Change : reduce file size
