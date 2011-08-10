@@ -261,6 +261,33 @@ li.L1,li.L3,li.L5,li.L7,li.L9 { }
   right: 0%;
 }
 
+@media only screen and (max-width: 480px){
+  html { -webkit-text-size-adjust:none; -ms-text-size-adjust:none; }
+  body { font:12px/1.1 sans-serif; *font-size:small; } 
+  #link{ display: none;}
+
+  body header h1{
+    color: #00AAFF;
+    font-family: arial, serif;
+    line-height: auto;
+    font-size: 2em;
+    text-shadow: #0066AA 1px 1px 1px;
+    margin: 0;
+    margin-bottom: 0.2em;
+    position: static;
+    height: auto;
+    width: auto;
+    -moz-transform:none;
+    -webkit-transform:none;
+    -o-transform:none;
+    -ms-transform:none;
+  }
+
+  body h2{
+    font-size: 1.4em;
+  }
+}
+
 @media print {
   * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important;
   -ms-filter: none !important; } 
