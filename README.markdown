@@ -1,6 +1,6 @@
 Include.js
 ==========
-A tiny javascript loader with cache control.
+A tiny but heavy on-demand async javascript loader 
 
 How to
 ------
