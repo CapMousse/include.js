@@ -9,7 +9,7 @@ Simplely add *Include.js* in your project and load it.
     include([
         'script1.js',
         ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}]
-        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}, 'OjectInFile']
+        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}, 'ObjectInFile']
     ], function(){
         //do something extraordinary when all files successfuly loaded
     });
