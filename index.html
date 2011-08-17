@@ -7,8 +7,10 @@
 <head>
 	<meta charset="UTF-8">
 	
-	<title>Include.js - A tiny javascript loader</title>
+	<title>Include.js</title>
 	<meta name="author" content="Jérémy Barbe">
+    <meta name="description" content="A tiny but heavy on-demand async javascript loader">
+    <meta name="keyword" content="javascript, include, load, async, asynchrone, require, file, js">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
@@ -29,32 +31,32 @@
 		<h1><a href="https://github.com/CapMousse/include.js">Include.js</a></h1>
 		<h2>A tiny but heavy on-demand async javascript loader</h2>
 	</header>
-	<section id="main" role="main">
-		<article>
+	<div id="main" role="main">
 		<p>Include.js is a tiny javascript loader (.4kb gziped). Speed up your page loading time with this easy tool.</p>
 		<p>How it speed up your loading time ? Without Include.js you need to download all javascript files when you come on the site. If you have jQuery, jQuery UI... it's more file to wait before your page be "ready". With Include.js, you just have one file to wait before your page be "ready". All other files are loaded after the page.</p>
 		<h1>Usage</h1>
 		<p>Insert Require.js in the head/body end of your document. It just need an array of files and  optionally a callback to run :</p>
 		<pre class="prettyprint">require(files, callback);</pre>
 		<p>A file can be represented by a string (path to the file) or an other array wich contain the file path, a callback function when the file is loaded and optionally the object name to be loaded.</p>
-		<pre class="prettyprint">[
+        <pre class="prettyprint">[
     'javascript/main.js',
     ['javascript/file.js', function(){}],
     ['javascript/jquery.js', function(){}, '$']
-]</pre>
-	<h1>Exemple</h1>
-    <ul>
-        <li><a href="http://capmousse.github.com/include.js/tests/test-head.html">Javascript in Head</a></li>
-        <li><a href="http://capmousse.github.com/include.js/tests/test-head-include.html">Include in Head</a></li>
-        <li><a href="http://capmousse.github.com/include.js/tests/test-body.html">Javascript in Body</a></li>
-        <li><a href="http://capmousse.github.com/include.js/tests/test-body-include.html">Include in Body</a></li>
-    </ul>
-    <h1>Download</h1>
-    <ul>
-        <li>Documented version : <a href="https://raw.github.com/CapMousse/Include.js/master/include.js">include.js</a></li>
-        <li>Minified version : <a href="https://raw.github.com/CapMousse/Include.js/master/include-min.js">include-min.js</a></li>
-    </ul>
-	</section>
+]
+        </pre>
+    	<h1>Exemple</h1>
+        <ul>
+            <li><a href="http://capmousse.github.com/include.js/tests/test-head.html">Javascript in Head</a></li>
+            <li><a href="http://capmousse.github.com/include.js/tests/test-head-include.html">Include in Head</a></li>
+            <li><a href="http://capmousse.github.com/include.js/tests/test-body.html">Javascript in Body</a></li>
+            <li><a href="http://capmousse.github.com/include.js/tests/test-body-include.html">Include in Body</a></li>
+        </ul>
+        <h1>Download</h1>
+        <ul>
+            <li>Documented version : <a href="https://raw.github.com/CapMousse/Include.js/master/include.js">include.js</a></li>
+            <li>Minified version : <a href="https://raw.github.com/CapMousse/Include.js/master/include-min.js">include-min.js</a></li>
+        </ul>
+	</div>
 	<footer>
         <a href="http://www.capitaine-mousse.fr">By Capitaine Mousse / Jérémy Barbe</a>
 	</footer>
