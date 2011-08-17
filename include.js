@@ -40,8 +40,8 @@
             
             script.onload = script.onreadystatechange = function(e, i){
                 i = 0, e = this.readyState || e.type;
-
-                if(e == "complete" || e == "load"){
+                
+                if(e == "loaded" || e == "complete" || e == "load"){
                     obj ?
                         //wait the javascript to be parsed to controll if object exists
                         (file = function(){
