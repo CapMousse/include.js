@@ -16,6 +16,10 @@ Simplely add *Include.js* in your project and load it.
 
 Version
 -------
+#### 1.0.2
+* Fix : Change callback check to older version (thanks mbarkhau)
+* Fix : Change file load state condition to match expression
+
 #### 1.0.1
 * Fix : crash if no file callback specified
 * Fix : IE8 Crash 

@@ -24,7 +24,8 @@
             cache = {}, scriptCounter = 0, time = 1;
 
         !files.pop&&(files=[files]);
-        !callback&&(callback=emptyFn);
+        callback=callback||emptyFn;
+        
         /*
          * function create
          * create a script node with asked file
@@ -41,7 +42,8 @@
             script.onload = script.onreadystatechange = function(e, i){
                 i = 0, e = this.readyState || e.type;
                 
-                if(e == "loaded" || e == "complete" || e == "load"){
+                //seach the loaded, load or complete expression
+                if(!e.search("load|complete")){
                     obj ?
                         //wait the javascript to be parsed to controll if object exists
                         (file = function(){
