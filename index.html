@@ -32,19 +32,19 @@
         <h2>A tiny but heavy on-demand async javascript loader</h2>
     </header>
     <div id="main" role="main">
-        <p>Include.js is a tiny javascript loader (.4kb gziped). Speed up your page loading time with this easy tool.</p>
-        <p>How it speed up your loading time ? Without Include.js you need to download all javascript files when you come on the site. If you have jQuery, jQuery UI... it's more file to wait before your page be "ready". With Include.js, you just have one file to wait before your page be "ready". All other files are loaded after the page.</p>
+        <p>Include.js is a tiny javascript loader (.4kb gzipped). Speed up your page loading time with this easy tool.</p>
+        <p>How does it speed up your loading time? Without Include.js you need to download all javascript files when you first hit the site. If you have jQuery, jQuery UI... it means a lot of files to be downloaded before your page is "ready". With Include.js, you just have one file to download before your page is "ready". All other files are loaded after the page.</p>
         <h1>Usage</h1>
-        <p>Insert Require.js in the head/body end of your document. It just need an array of files and  optionally a callback to run :</p>
+        <p>Insert Require.js in the head/body end of your document. It just needs an array of files and optionally a callback to run :</p>
         <pre class="prettyprint">require(files, callback);</pre>
-        <p>A file can be represented by a string (path to the file) or an other array wich contain the file path, a callback function when the file is loaded and optionally the object name to be loaded.</p>
+        <p>A file can be represented by a string (path to the file) or another array wich contains the file path, a callback function when the file is loaded and optionally the object name to be loaded.</p>
         <pre class="prettyprint">[
     'javascript/main.js',
     ['javascript/file.js', function(){}],
     ['javascript/jquery.js', function(){}, '$']
 ]
         </pre>
-    	<h1>Exemple</h1>
+    	<h1>Examples</h1>
         <ul>
             <li><a href="http://capmousse.github.com/include.js/tests/test-head.html">Javascript in Head</a></li>
             <li><a href="http://capmousse.github.com/include.js/tests/test-head-include.html">Include in Head</a></li>
