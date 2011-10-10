@@ -10,7 +10,7 @@
     <title>Include.js</title>
     <meta name="author" content="Jérémy Barbe">
     <meta name="description" content="A tiny but heavy on-demand async javascript loader">
-    <meta name="keyword" content="javascript, include, load, async, asynchrone, require, file, js">
+    <meta name="keyword" content="javascript, include, load, async, asynchrone, include, file, js">
     <meta name="google-site-verification" content="COfeZci6WJ6l2-LAsH20xf5t50SnSTeVMCQEfwHAqUg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
@@ -35,8 +35,8 @@
         <p>Include.js is a tiny javascript loader (.4kb gzipped). Speed up your page loading time with this easy tool.</p>
         <p>How does it speed up your loading time? Without Include.js you need to download all javascript files when you first hit the site. If you have jQuery, jQuery UI... it means a lot of files to be downloaded before your page is "ready". With Include.js, you just have one file to download before your page is "ready". All other files are loaded after the page.</p>
         <h1>Usage</h1>
-        <p>Insert Require.js in the head/body end of your document. It just needs an array of files and optionally a callback to run :</p>
-        <pre class="prettyprint">require(files, callback);</pre>
+        <p>Insert Include.js in the head/body end of your document. It just needs an array of files and optionally a callback to run :</p>
+        <pre class="prettyprint">include(files, callback);</pre>
         <p>A file can be represented by a string (path to the file) or another array wich contains the file path, a callback function when the file is loaded and optionally the object name to be loaded.</p>
         <pre class="prettyprint">[
     'javascript/main.js',
