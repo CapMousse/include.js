@@ -3,7 +3,7 @@
 //     May be freely distributed under the MIT license.
 
 !function(environment){
-    /*
+    /**
      * Include
      * Load all files list in object
      * @param    array   array of files to be loaded
@@ -13,36 +13,41 @@
      *       ["filename", callback] 
      *       or
      *       ["filename", "loaded object", callback] 
+     *       or
+     *       ["filename","filename","filename","filename"]
      *   ]
      * 
      * @params  callback    function launched when all files are loaded
      * 
      * @return   void
-    **/   
-    function include(files, callback){
+     */   
+    environment.include = function(files, callback){
         var doc = document, body = "body", emptyFn = function(){}, 
             cache = {}, scriptCounter = 0, time = 1;
 
         !files.pop&&(files=[files]);
         !callback&&(callback=emptyFn);
-        /*
+    
+        /**
          * function create
          * create a script node with asked file
-         * @param   file      the file
-         * @param   index     index of file
-         * @param   callback  callback for the current file
-         * @param   obj       the object loaded in file
+         * @param   file          the file
+         * @param   fileCallback  callback for the current file
+         * @param   obj           the object loaded in file
+         * @param   script        empty var used to create a script element
          * @return  void
          */
         function _create(file, fileCallback, obj, script){
-            script = doc.createElement("script");     
+            if(!file.search || cache[file]) return;
+            
+            script = doc.createElement("script");
             scriptCounter++;
             
             script.onload = script.onreadystatechange = function(e, i){
                 i = 0, e = this.readyState || e.type;
                 
                 if(e == "loaded" || e == "complete" || e == "load"){
-                    obj ?
+                    obj && obj.search ?
                         //wait the javascript to be parsed to controll if object exists
                         (file = function(){
                             environment[obj] ? _countFiles(fileCallback) : setTimeout(file, time);
@@ -52,24 +57,32 @@
                 }
             };
             
-            script.async = !0;
+            script.async = fileCallback.call ? !0 : !1;
             script.src = file;
             
             doc[body].appendChild(script)
         }
         
-        /*
+        /**
          * function countFiles
          * count files loaded and launch callback
-         * @param file
+         * @param fileCallback  callback for the current file
          * @return void
          */
         function _countFiles(fileCallback){
-            !--scriptCounter&&callback()+fileCallback()
+            fileCallback.call ? fileCallback() : emptyFn();
+            !--scriptCounter&&callback();
         }
 
-
-
+        
+        /**
+         * ceck if the dom is ready and launch the loading script
+         * @param i             empty var for the "for" loop
+         * @param script        empty var for all the script
+         * @param obj           empty var for the asked object to launch a callback
+         * @param callbackFile  empty var for the callback function
+         * @return void
+         */
         !function domCheck(i, script, obj, callbackFile){
             if(!doc[body]) return setTimeout(domCheck, time);
 
@@ -80,15 +93,15 @@
 
             for(i in files)
                 files[i].pop?
-                    (script = files[i][0], callbackFile = files[i][1], obj = files[i][2]):
+                    files[i][1].search('.js') ? 
+                        (files[i].map(_create)):
+                        (script = files[i][0], callbackFile = files[i][1], obj = files[i][2]):
                     (script = files[i]),
-                cache[script] ?
+                cache[script] && script ?
                     callbackFile():
                     _create(script, callbackFile, obj);
 
             !scriptCounter&&callback()
         }()
     }
-
-    environment.include = include
 }(this)
