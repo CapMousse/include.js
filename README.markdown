@@ -1,6 +1,6 @@
 Include.js
 ==========
-A tiny but heavy on-demand async javascript loader 
+A tiny but heavy on-demand async javascript loader (0.4k gziped)
 
 How to
 ------
@@ -8,14 +8,24 @@ Simplely add *Include.js* in your project and load it.
 
     include([
         'script1.js',
-        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}]
-        ['other/js/script3.js', function(){ //do something extraordinary when this file is loaded}, 'ObjectInFile']
+        ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded" }],
+        ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile']
     ], function(){
         //do something extraordinary when all files successfuly loaded
     });
 
 Version
--------
+
+#### 1.0.4
+* Fix : Domready not realy waiting the dom to be ready
+
+#### 1.0.3
+* Fix : file array parsing prototype and try to load unknown files
+
+#### 1.0.2
+* Fix : Change callback check to older version (thanks mbarkhau)
+* Fix : Change file load state condition to match expression
+
 #### 1.0.1
 * Fix : crash if no file callback specified
 * Fix : IE8 Crash 
