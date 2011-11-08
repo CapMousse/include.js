@@ -16,6 +16,9 @@ Simplely add *Include.js* in your project and load it.
 
 Version
 
+#### 1.0.5
+* Fix : File callback not called
+
 #### 1.0.4
 * Fix : Domready not realy waiting the dom to be ready
 

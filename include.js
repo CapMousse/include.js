@@ -1,4 +1,4 @@
-//     include.js 1.0.4
+//     include.js 1.0.5
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -56,7 +56,8 @@
          * @return void
          */
         function _countFiles(fileCallback){
-            !--scriptCounter&&callback()+fileCallback()
+			fileCallback();
+            !--scriptCounter&&callback()
         }
 
         /**
