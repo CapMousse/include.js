@@ -10,4 +10,4 @@
 	Language: English
 	Doctype: HTML5
 	IDE: Sublime Text 2, Wamp, Chrome (Yslow, SpeedTracer)
-	Framework: Shwaark Framework (php), HTMLBoilerPlate (html, css)
+	Framework: HTMLBoilerPlate (html, css)
