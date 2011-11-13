@@ -2,20 +2,19 @@
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
-!function(environment, name){
+!function(environment){
     
     /**
      * load asked file
      * @param files array of files to be loaded
      * @param callback general callback when all files are loaded
      */
-    environment[name] = function(files, callback){
+    environment['include'] = function(files, callback){
         var doc = document, body = "body", emptyFn = function(){},
-            cache = {}, scriptCounter = 0, time = 1, element = doc.createElement('div');
+            cache = {}, scriptCounter = 0, time = 1;
 
         !files.pop&&(files=[files]);
         callback=callback||emptyFn;
-        element.id = Date();
 
         /**
          * create a script node with asked file
@@ -25,7 +24,7 @@
          * @param   script          placeholder for the script element
          * @return  void
          */
-        function _create(file, fileCallback, obj, script){
+        function _create(file, fileCallback, obj, script, loaded){
             script = doc.createElement("script");
             scriptCounter++;
 
@@ -33,7 +32,7 @@
                 i = 0, e = this.readyState || e.type;
 
                 //seach the loaded, load or complete expression
-                if(!e.search("load|complete")){
+                if(!e.search("load|complete") && !loaded){
                     obj ?
                         //wait the javascript to be parsed to controll if object exists
                         (file = function(){
@@ -41,6 +40,8 @@
                             ++i>time&&(file=emptyFn)
                         })():
                         _countFiles(fileCallback)
+
+                    loaded = i;
                 }
             };
 
@@ -56,7 +57,7 @@
          * @return void
          */
         function _countFiles(fileCallback){
-			fileCallback();
+            fileCallback();
             !--scriptCounter&&callback()
         }
 
@@ -68,7 +69,9 @@
          * @param callbackFile  placholder for the callback function
          * @return void
          */
-        function parseFiles(i, script, obj, callbackFile){
+        !function include(i, script, obj, callbackFile){
+            if(!doc[body]) return setTimeout(include, time);
+
             script = doc.getElementsByTagName("script");
             callbackFile = emptyFn;
 
@@ -83,19 +86,7 @@
                     _create(script, callbackFile, obj);
 
             !scriptCounter&&callback()
-        }
-
-        /**
-         * check if the dom is ready
-         * @return void
-         */
-        !function domCheck(){
-            if(!doc[body]) return setTimeout(domCheck, time);
-            doc[body].appendChild(element);
-            if(!doc.getElementById(element.id)) return setTimeout(domCheck, time);
-            doc[body].removeChild(element);
-            parseFiles();
         }()
     }
 
-}(this, 'include')
+}(this)

@@ -16,6 +16,10 @@ Simplely add *Include.js* in your project and load it.
 
 Version
 
+#### 1.0.6
+* Fix : file callback call multiple time (IE9, Opera)
+* Fox : domReady cpu intensive (return to old version)
+
 #### 1.0.5
 * Fix : File callback not called
 
