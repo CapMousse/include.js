@@ -4,7 +4,7 @@ A tiny but heavy on-demand async javascript loader (0.4k gziped)
 
 How to
 ------
-Simplely add *Include.js* in your project and load it.
+Simply add *Include.js* in your project and load it.
 
     include([
         'script1.js',
