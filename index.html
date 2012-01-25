@@ -1,0 +1,118 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="fr" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="fr" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="fr" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="fr" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="fr"> <!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+	
+    <title>Include.js</title>
+    <meta name="author" content="Jérémy Barbe">
+    <meta name="description" content="A tiny but heavy on-demand async javascript loader">
+    <meta name="keyword" content="javascript, include, load, async, asynchrone, include, file, js">
+    <meta name="google-site-verification" content="COfeZci6WJ6l2-LAsH20xf5t50SnSTeVMCQEfwHAqUg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+    <link type="text/plain" rel="author" href="humans.txt" />
+    <link rel="stylesheet" href="static/css/style.css?v=2">
+    <link  href="http://fonts.googleapis.com/css?family=Terminal+Dosis+Light:regular&v1" rel="stylesheet" type="text/css" >
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body role="document" class="clearfix">
+    <!--[if lt IE 9]>
+    <div id="ie">
+        For a better experience on the web, upgrade your web browser to <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">IE9</a> or change to <a href="http://google.com/chrome/">Chrome</a>, <a href="http://www.mozilla.com">Firefox</a>, <a href="http://www.opera.com">Opera</a>...
+    </div>
+    <![endif]-->
+    <header class="header">
+        <div class="container clearfix">
+            <h1><a href="https://github.com/CapMousse/include.js">Include.js</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="#features">Feature</a></li>
+                    <li><a href="#gets-started">Get's started</a></li>
+                    <li><a href="#demo">Demo</a></li>
+                    <li><a href="https://raw.github.com/CapMousse/include.js/master/include-min.js" class="button">Download</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div id="top" >
+        <div class="container">
+            <h1>Include.js</h1>
+            <h2>A tiny but heavy on-demand async javascript loader</h2>
+            <pre class="prettyprint">!function(n,s){n[s]=function(c,h){var d=document,i="body",l=function(){},o={},m=0,j=1,k=d.createElement('div');!c.pop&&(c=[c]);h=h||l;k.id=Date();function t(e,f,p,g){g=d.createElement("script");m++;g.onload=g.onreadystatechange=function(a,b){b=0,a=this.readyState||a.type;if(!a.search("load|complete")){p?(e=function(){n[p]?q(f):setTimeout(e,j);++b>j&&(e=l)})():q(f)}};g.async=!0;g.src=e;d[i].appendChild(g)}function q(a){a();!--m&&h()}function u(a,b,e,f){b=d.getElementsByTagName("script");f=l;for(a in b)b[a].src&&(o[b[a].src]=a);for(a=c.length;a--;)c[a].pop?(b=c[a][0],f=c[a][1],e=c[a][2]):(b=c[a]),o[b]?f():t(b,f,e);!m&&h()}!function r(){if(!d[i])return setTimeout(r,j);d[i].appendChild(k);if(!d.getElementById(k.id))return setTimeout(r,j);d[i].removeChild(k);u()}()}}(this,'include')</pre>
+        </div>
+    </div>
+    
+    <div id="main" role="main">
+        <div class="container">
+            <div class="last-update clearfix">
+                <div class="version">
+                    <p>Current version</p>
+                    <p class="version-number">1.0.4</p>
+                    <a href="https://github.com/CapMousse/include.js">clone now</a>
+                </div>
+                <div class="links">
+                    <a href="https://raw.github.com/CapMousse/include.js/master/include.js">Get the latest version</a>
+                    <a href="https://raw.github.com/CapMousse/include.js/master/include-min.js">Get the production version</a>
+                </div>
+            </div>
+            <div id="content">
+				<div class="columns clearfix">
+					<div class="column">
+						<h2>Infos</h2>
+						<p><strong>include.js</strong> is a tiny javascript tool made to load asynchronously javascript files when you need them.</p>
+						<p>Now that google track page loading time, use this kind of tools can inscrease your score to appear on the top of results.</p>
+						<p>This kind of tools are also usefull for Web APP's, loading script only when user need them.</p>
+					</div>
+					<div class="column middle">
+						<h2 id="features">Features</h2>
+						<p><strong>include.js</strong> don't load script that are already loaded in the page, force to load them asynchronously and can control the presence of a javascript object.</p>
+						<p>Each file can have a callback and a general callback can be run when each files are loaded.</p>
+					</div>
+					<div class="column">
+						<h2>Project</h2>
+						<p><strong>include.js</strong> whas created by <a href="http://www.shwaark.com">Capitaine Mousse</a> (Jérémy Barbe) under the MIT License.</p>
+						<p>The project is hosted by GitHub and everyone can contribute to this project.</p>
+					</div>
+				</div>
+                <h2 id="gets-started">Get's started</h2>
+                <p>Insert Include.js in the head or body your document. It just needs an array of files and optionally a callback to run :</p>
+                <pre class="prettyprint">include([
+    "file1.js",
+    ["file2-with-callback.js", function(){ /*do something*/ }],
+    ["jquery-and-callback.js", function(){ /*do something*/ }, "jQuery"]
+], function(){
+    //end callback
+});</pre>
+                <h2 id="demo">Demo</h2>
+                <ul>
+                    <li><a href="http://capmousse.github.com/include.js/tests/test-head.html">Javascript in Head</a></li>
+                    <li><a href="http://capmousse.github.com/include.js/tests/test-head-include.html">Include in Head</a></li>
+                    <li><a href="http://capmousse.github.com/include.js/tests/test-body.html">Javascript in Body</a></li>
+                    <li><a href="http://capmousse.github.com/include.js/tests/test-body-include.html">Include in Body</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="static/js/include-min.js"></script>
+    <script>
+		include(
+            [
+                ['static/js/prettify.js', function(){prettyPrint()}],
+                'http://www.google-analytics.com/ga.js'
+                /*'http://apis.google.com/js/plusone.js'*/
+            ]
+        );
+
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-24455497-2']);
+		_gaq.push(['_trackPageview']);
+	</script>
+</body>
+</html>

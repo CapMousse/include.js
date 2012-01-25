@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Javascript head test</title>
+    <script>
+        // calculate difference between zero and window.onload
+        var now = new Date();
+        window.onload = function() {
+            document.getElementById("time").innerHTML = (new Date()).getTime() - now.getTime();   
+        };
+    </script>
+</head>
+<body role="document" class="clearfix">
+    <div id="main" role="main">
+        <h1>include in body</h1>
+        <p>Time to load : <span id="time"></span> ms</p>
+    </div>
+    <div id="exemple"></div>
+    <section>
+        <h2>Source</h2>
+        <div style="padding: 10px; border: 1px solid #ccc;"><code>&lt;!doctype html&gt;<br />&lt;html&gt;<br />&lt;head&gt;<br />&nbsp; &nbsp; &lt;meta charset=&quot;UTF-8&quot;&gt;<br />&nbsp; &nbsp;&nbsp;<br />&nbsp; &nbsp; &lt;title&gt;Javascript head test&lt;/title&gt;<br />&nbsp; &nbsp; &lt;script&gt;<br />&nbsp; &nbsp; &nbsp; &nbsp; // calculate difference between zero and window.onload<br />&nbsp; &nbsp; &nbsp; &nbsp; var now = new Date();<br />&nbsp; &nbsp; &nbsp; &nbsp; window.onload = function() {<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&quot;time&quot;).innerHTML = (new Date()).getTime() - now.getTime(); &nbsp;&nbsp;<br />&nbsp; &nbsp; &nbsp; &nbsp; };<br />&nbsp; &nbsp; &lt;/script&gt;<br />&lt;/head&gt;<br />&lt;body role=&quot;document&quot; class=&quot;clearfix&quot;&gt;<br />&nbsp; &nbsp; &lt;div id=&quot;main&quot; role=&quot;main&quot;&gt;<br />&nbsp; &nbsp; &nbsp; &nbsp; &lt;h1&gt;include in body&lt;/h1&gt;<br />&nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Time to load : &lt;span id=&quot;time&quot;&gt;&lt;/span&gt; ms&lt;/p&gt;<br />&nbsp; &nbsp; &lt;/div&gt;<br />&nbsp; &nbsp; &lt;div id=&quot;exemple&quot;&gt;&lt;/div&gt;<br />&nbsp; &nbsp; &lt;script src=&quot;scripts/include-min.js&quot;&gt;&lt;/script&gt;<br />&nbsp; &nbsp; &lt;script&gt;<br />&nbsp; &nbsp; &nbsp; &nbsp; include([<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &quot;scripts/underscore.js&quot;,<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &quot;scripts/jquery.js&quot;,<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &quot;scripts/backbone.js&quot;<br />&nbsp; &nbsp; &nbsp; &nbsp; ], function(){<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; $(&#39;#exemple&#39;).html(&#39;Jquery loaded!&#39;)<br />&nbsp; &nbsp; &nbsp; &nbsp; });<br />&nbsp; &nbsp; &lt;/script&gt;<br />&lt;/body&gt;<br />&lt;/html&gt;</code></div>
+    </section>
+    <script src="scripts/include-min.js"></script>
+    <script>
+        include([
+            "scripts/underscore.js",
+            "scripts/jquery.js",
+            "scripts/backbone.js"
+        ], function(){
+            $('#exemple').html('Jquery loaded!')
+        });
+    </script>
+</body>
+</html>
