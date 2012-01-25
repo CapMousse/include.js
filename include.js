@@ -1,4 +1,4 @@
-//     include.js 1.1.0
+//     include.js 1.1.1
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -11,7 +11,7 @@
      */
     environment['include'] = function(files, callback){
         var doc = document, body = "body", emptyFn = function(){},
-            cache = {}, scriptCounter = 0, time = 1;
+            scriptCounter = 0, time = 1;
 
         !files.pop&&(files=[files]);
         callback=callback||emptyFn;
@@ -27,32 +27,38 @@
         function _create(file, fileCallback, obj, script, loaded, isStyle){
             isStyle = (/\.css$/.test(file));
 
-            isStyle ?
-                script = doc.createElement("link") :
+            if(isStyle){
+                script = doc.createElement("link");
+                script.href = file;
+                script.rel = "stylesheet";
+                script.type = "text/css";
+                doc['head'].appendChild(script);
+                fileCallback();
+            }else{
+                scriptCounter++;
                 script = doc.createElement("script");
 
-            scriptCounter++;
+                script.onload = script.onreadystatechange = function(e, i){
+                    i = 0; e = this.readyState || e.type;
 
-            script.onload = script.onreadystatechange = function(e, i){
-                i = 0; e = this.readyState || e.type;
+                    //seach the loaded, load or complete expression
+                    if(!e.search("load|complete") && !loaded){
+                        obj ?
+                            //wait the javascript to be parsed to controll if object exists
+                            (file = function(){
+                                environment[obj] ? _countFiles(fileCallback) : setTimeout(file, time);
+                                ++i>time&&(file=emptyFn)
+                            })():
+                            _countFiles(fileCallback);
 
-                //seach the loaded, load or complete expression
-                if(!e.search("load|complete") && !loaded){
-                    obj ?
-                        //wait the javascript to be parsed to controll if object exists
-                        (file = function(){
-                            environment[obj] ? _countFiles(fileCallback) : setTimeout(file, time);
-                            ++i>time&&(file=emptyFn)
-                        })():
-                        _countFiles(fileCallback)
+                        loaded = time;
+                    }
+                };
 
-                    loaded = time;
-                }
-            };
-
-            isStyle ?
-                (script.href = file, script.rel = "stylesheet", doc['head'].appendChild(script)):
-                (script.async = !0, script.src = file, doc[body].appendChild(script));
+                script.async = !0;
+                script.src = file;
+                doc[body].appendChild(script);
+            }
         }
 
         /**
@@ -76,21 +82,19 @@
         (function include(i, script, obj, callbackFile){
             if(!doc[body]) return setTimeout(include, time);
 
-            script = doc.getElementsByTagName("script");
-            callbackFile = emptyFn;
+            for(i=files.length;i--;){
+                callbackFile = emptyFn;
+                obj = !1;
 
-            for(i in script) script[i].src&&(cache[script[i].src]=i);
-
-            for(i=files.length;i--;)
                 files[i].pop?
                     (script = files[i][0], callbackFile = files[i][1], obj = files[i][2]):
-                    (script = files[i]),
-                cache[script] ?
-                    callbackFile():
-                    _create(script, callbackFile, obj);
+                    (script = files[i]);
+
+                _create(script, callbackFile, obj);
+            }
 
             !scriptCounter&&callback()
         })()
     }
 
-})(this)
+})(this);

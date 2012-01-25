@@ -20,6 +20,12 @@ include([
 
 Version
 
+#### 1.1.1
+* Drop **cache** to prevent bug
+* Fix callback file not workign
+* Fix CSS doesn't trigger Onload/OnreadyStateChange
+* Fix Object checking crash
+
 #### 1.1.0
 * Add CSS load support
 
