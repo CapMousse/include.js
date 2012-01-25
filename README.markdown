@@ -6,15 +6,22 @@ How to
 ------
 Simply add *Include.js* in your project and load it.
 
-    include([
-        'script1.js',
-        ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded" }],
-        ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile']
-    ], function(){
-        //do something extraordinary when all files successfuly loaded
-    });
+```javascript
+include([
+    'script1.js',
+    'stylesheet.css',
+    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded" }],
+    ['other/css/stylesheet2.js', function(){ "do something extraordinary when this file is loaded" }],
+    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile']
+], function(){
+    //do something extraordinary when all files successfuly loaded
+});
+```
 
 Version
+
+#### 1.1.0
+* Add CSS load support
 
 #### 1.0.7
 * Fix var

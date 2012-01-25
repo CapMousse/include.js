@@ -1,8 +1,8 @@
-//     include.js 1.0.7
+//     include.js 1.1.0
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
-!function(environment){
+(function(environment){
     
     /**
      * load asked file
@@ -17,19 +17,24 @@
         callback=callback||emptyFn;
 
         /**
-         * create a script node with asked file
-         * @param   file            the file
-         * @param   fileCallback    the callback for the current script
-         * @param   obj             the object loaded in file
-         * @param   script          placeholder for the script element
+         * create a script/link node with asked file
+         * @param   {String}    file            the file
+         * @param   {Function}  fileCallback    the callback for the current script
+         * @param   {String}    obj             the object loaded in file
+         * @param   {void}      script          placeholder for the script element
          * @return  void
          */
-        function _create(file, fileCallback, obj, script, loaded){
-            script = doc.createElement("script");
+        function _create(file, fileCallback, obj, script, loaded, isStyle){
+            isStyle = (/\.css$/.test(file));
+
+            isStyle ?
+                script = doc.createElement("link") :
+                script = doc.createElement("script");
+
             scriptCounter++;
 
             script.onload = script.onreadystatechange = function(e, i){
-                i = 0, e = this.readyState || e.type;
+                i = 0; e = this.readyState || e.type;
 
                 //seach the loaded, load or complete expression
                 if(!e.search("load|complete") && !loaded){
@@ -45,10 +50,9 @@
                 }
             };
 
-            script.async = !0;
-            script.src = file;
-
-            doc[body].appendChild(script)
+            isStyle ?
+                (script.href = file, script.rel = "stylesheet", doc['head'].appendChild(script)):
+                (script.async = !0, script.src = file, doc[body].appendChild(script));
         }
 
         /**
@@ -69,7 +73,7 @@
          * @param callbackFile  placholder for the callback function
          * @return void
          */
-        !function include(i, script, obj, callbackFile){
+        (function include(i, script, obj, callbackFile){
             if(!doc[body]) return setTimeout(include, time);
 
             script = doc.getElementsByTagName("script");
@@ -86,7 +90,7 @@
                     _create(script, callbackFile, obj);
 
             !scriptCounter&&callback()
-        }()
+        })()
     }
 
-}(this)
+})(this)
