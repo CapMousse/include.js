@@ -45,7 +45,7 @@
         <div class="container">
             <h1>Include.js</h1>
             <h2>A tiny but heavy on-demand async javascript loader</h2>
-            <pre class="prettyprint">!function(n,s){n[s]=function(c,h){var d=document,i="body",l=function(){},o={},m=0,j=1,k=d.createElement('div');!c.pop&&(c=[c]);h=h||l;k.id=Date();function t(e,f,p,g){g=d.createElement("script");m++;g.onload=g.onreadystatechange=function(a,b){b=0,a=this.readyState||a.type;if(!a.search("load|complete")){p?(e=function(){n[p]?q(f):setTimeout(e,j);++b>j&&(e=l)})():q(f)}};g.async=!0;g.src=e;d[i].appendChild(g)}function q(a){a();!--m&&h()}function u(a,b,e,f){b=d.getElementsByTagName("script");f=l;for(a in b)b[a].src&&(o[b[a].src]=a);for(a=c.length;a--;)c[a].pop?(b=c[a][0],f=c[a][1],e=c[a][2]):(b=c[a]),o[b]?f():t(b,f,e);!m&&h()}!function r(){if(!d[i])return setTimeout(r,j);d[i].appendChild(k);if(!d.getElementById(k.id))return setTimeout(r,j);d[i].removeChild(k);u()}()}}(this,'include')</pre>
+            <pre class="prettyprint">(function(l){l.include=function(b,f){function o(b,h,c,a,g,d){(d=/\.css$/.test(b))?a=e.createElement("link"):a=e.createElement("script");i++;a.onload=a.onreadystatechange=function(a,d){d=0;a=this.readyState||a.type;!a.search("load|complete")&&!g&&(c?(b=function(){l[c]?(h(),!--i&&f()):setTimeout(b,j);++d>j&&(b=k)})():(h(),!--i&&f()),g=j)};d?(a.href=b,a.rel="stylesheet",e.head.appendChild(a)):(a.async=!0,a.src=b,e[m].appendChild(a))}var e=document,m="body",k=function(){},n={},i=0,j=1;!b.pop&&(b=[b]);f=f||k;(function h(c,a,g,d){if(!e[m])return setTimeout(h,j);a=e.getElementsByTagName("script");d=k;for(c in a)a[c].src&&(n[a[c].src]=c);for(c=b.length;c--;)b[c].pop?(a=b[c][0],d=b[c][1],g=b[c][2]):a=b[c],n[a]?d():o(a,d,g);!i&&f()})()}})(this);</pre>
         </div>
     </div>
     
@@ -54,7 +54,7 @@
             <div class="last-update clearfix">
                 <div class="version">
                     <p>Current version</p>
-                    <p class="version-number">1.0.4</p>
+                    <p class="version-number">1.1.0</p>
                     <a href="https://github.com/CapMousse/include.js">clone now</a>
                 </div>
                 <div class="links">
@@ -66,9 +66,9 @@
 				<div class="columns clearfix">
 					<div class="column">
 						<h2>Infos</h2>
-						<p><strong>include.js</strong> is a tiny javascript tool made to load asynchronously javascript files when you need them.</p>
-						<p>Now that google track page loading time, use this kind of tools can inscrease your score to appear on the top of results.</p>
-						<p>This kind of tools are also usefull for Web APP's, loading script only when user need them.</p>
+						<p><strong>include.js</strong> is a tiny javascript tool made to load asynchronously Javascript or CSS files when you need them.</p>
+						<p>Now that google track page loading time, use this kind of tools can increase your score to appear on the top of results.</p>
+						<p>This kind of tools are also useful for Web APP's, loading script only when user need them.</p>
 					</div>
 					<div class="column middle">
 						<h2 id="features">Features</h2>
@@ -85,6 +85,7 @@
                 <p>Insert Include.js in the head or body your document. It just needs an array of files and optionally a callback to run :</p>
                 <pre class="prettyprint">include([
     "file1.js",
+    "style.css",
     ["file2-with-callback.js", function(){ /*do something*/ }],
     ["jquery-and-callback.js", function(){ /*do something*/ }, "jQuery"]
 ], function(){
