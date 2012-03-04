@@ -11,8 +11,12 @@ include([
     'script1.js',
     'stylesheet.css',
     ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded" }],
-    ['other/css/stylesheet2.js', function(){ "do something extraordinary when this file is loaded" }],
-    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile']
+    ['other/css/stylesheet2.css', function(){ "do something extraordinary when this file is loaded" }],
+    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile'],
+    ['other/js/script4.js', function(fn){
+      "Tell include.js when I'm done doing something extraordinary";
+      fn(); //All done, you may finish now
+    }]
 ], function(){
     //do something extraordinary when all files successfuly loaded
 });
