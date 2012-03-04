@@ -18,6 +18,7 @@ include([
       //See, now we can handle dependencies
       include('other/js/script4sbestfriend', fn);
       //Now, once script4 is loaded, script4's best friend, who depends on script4 can be loaded too
+      //...and once it's done loading, it will signal to its parent by running fn
     }]
 ], function(){
     //do something extraordinary when all files successfuly loaded
