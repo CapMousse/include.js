@@ -3,7 +3,7 @@
 //     May be freely distributed under the MIT license.
 
 (function(environment){
-    
+
     /**
      * load asked file
      * @param files array of files to be loaded
@@ -67,8 +67,8 @@
          * @return void
          */
         function _countFiles(fileCallback){
-            fileCallback();
-            !--scriptCounter&&callback()
+            function waitFn() {!--scriptCounter&&callback()}
+            fileCallback.length ? fileCallback(waitFn) : (fileCallback(), waitFn())
         }
 
         /**
