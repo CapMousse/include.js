@@ -15,7 +15,9 @@ include([
     ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile'],
     ['other/js/script4.js', function(fn){
       "Tell include.js when I'm done doing something extraordinary";
-      fn(); //All done, you may finish now
+      //See, now we can handle dependencies
+      include('other/js/script4sbestfriend', fn);
+      //Now, once script4 is loaded, script4's best friend, who depends on script4 can be loaded too
     }]
 ], function(){
     //do something extraordinary when all files successfuly loaded
