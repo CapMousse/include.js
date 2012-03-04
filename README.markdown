@@ -11,8 +11,15 @@ include([
     'script1.js',
     'stylesheet.css',
     ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded" }],
-    ['other/css/stylesheet2.js', function(){ "do something extraordinary when this file is loaded" }],
-    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile']
+    ['other/css/stylesheet2.css', function(){ "do something extraordinary when this file is loaded" }],
+    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile'],
+    ['other/js/script4.js', function(fn){
+      "Tell include.js when I'm done doing something extraordinary";
+      //See, now we can handle dependencies
+      include('other/js/script4sbestfriend', fn);
+      //Now, once script4 is loaded, script4's best friend, who depends on script4 can be loaded too
+      //...and once it's done loading, it will signal to its parent by running fn
+    }]
 ], function(){
     //do something extraordinary when all files successfuly loaded
 });
