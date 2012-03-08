@@ -27,6 +27,9 @@ include([
 
 Version
 
+#### 1.1.2
+* Nested dependencies **thanks to [kevinmctigue](https://github.com/kevinmctigue) **
+
 #### 1.1.1
 * Drop **cache** to prevent bug
 * Fix callback file not workign

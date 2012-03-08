@@ -1,4 +1,4 @@
-//     include.js 1.1.1
+//     include.js 1.1.2
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
