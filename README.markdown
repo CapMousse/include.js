@@ -27,6 +27,10 @@ include([
 
 Version
 
+#### 1.1.3
+* Memory leak fix (thank to **[jtsoi](https://github.com/jtsoi)**)
+* Prevent already loaded files to be reloaded (cause collision with 2 files with same name)
+
 #### 1.1.2
 * Nested dependencies **thanks to [kevinmctigue](https://github.com/kevinmctigue)**
 

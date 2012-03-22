@@ -1,4 +1,4 @@
-//     include.js 1.1.2
+//     include.js 1.1.3
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -10,8 +10,8 @@
      * @param callback general callback when all files are loaded
      */
     environment['include'] = function(files, callback){
-        var doc = document, body = "body", emptyFn = function(){},
-            scriptCounter = 0, time = 1;
+        var doc = document, tags = "getElementsByTagName", body = "body", emptyFn = function(){}, cache = {},
+            scriptCounter = 0, time = 1, array = [], sc = "script", lk = "link", j;
 
         !files.pop&&(files=[files]);
         callback=callback||emptyFn;
@@ -28,7 +28,7 @@
             isStyle = (/\.css$/.test(file));
 
             if(isStyle){
-                script = doc.createElement("link");
+                script = doc.createElement(lk);
                 script.href = file;
                 script.rel = "stylesheet";
                 script.type = "text/css";
@@ -36,7 +36,7 @@
                 fileCallback();
             }else{
                 scriptCounter++;
-                script = doc.createElement("script");
+                script = doc.createElement(sc);
 
                 script.onload = script.onreadystatechange = function(e, i){
                     i = 0; e = this.readyState || e.type;
@@ -50,6 +50,17 @@
                                 ++i>time&&(file=emptyFn)
                             })():
                             _countFiles(fileCallback);
+
+                        cache[script.src.split('/').pop()] = i;
+
+                        /*
+                         * memory leak fix
+                         * tanks to jtsoi & jQuery team
+                         * https://github.com/CapMousse/include.js/issues/5
+                         */
+                        script.onload = script.onreadystatechange = array._;
+                        script.parentNode&&script.parentNode.removeChild(script);
+                        script = array._;
 
                         loaded = time;
                     }
@@ -82,6 +93,17 @@
         (function include(i, script, obj, callbackFile){
             if(!doc[body]) return setTimeout(include, time);
 
+            //transform Nodelist to array and concat them
+            array = array.concat(
+                array.slice.call(doc[tags](sc)),
+                array.slice.call(doc[tags](lk))
+            );
+
+            for(i=array.length;i--;){
+                j = array[i].src || array[i].href;
+                j&&(cache[j.split('/').pop()] = j);
+            }
+
             for(i=files.length;i--;){
                 callbackFile = emptyFn;
                 obj = !1;
@@ -90,8 +112,10 @@
                     (script = files[i][0], callbackFile = files[i][1], obj = files[i][2]):
                     (script = files[i]);
 
-                _create(script, callbackFile, obj);
+                //don't load script if already loaded
+                cache[script.split('/').pop()]||_create(script, callbackFile, obj);
             }
+
 
             !scriptCounter&&callback()
         })()
