@@ -45,7 +45,7 @@
         <div class="container">
             <h1>Include.js</h1>
             <h2>A tiny but heavy on-demand async javascript loader</h2>
-            <pre class="prettyprint">(function(l){l.include=function(b,f){function o(b,h,c,a,g,d){(d=/\.css$/.test(b))?a=e.createElement("link"):a=e.createElement("script");i++;a.onload=a.onreadystatechange=function(a,d){d=0;a=this.readyState||a.type;!a.search("load|complete")&&!g&&(c?(b=function(){l[c]?(h(),!--i&&f()):setTimeout(b,j);++d>j&&(b=k)})():(h(),!--i&&f()),g=j)};d?(a.href=b,a.rel="stylesheet",e.head.appendChild(a)):(a.async=!0,a.src=b,e[m].appendChild(a))}var e=document,m="body",k=function(){},n={},i=0,j=1;!b.pop&&(b=[b]);f=f||k;(function h(c,a,g,d){if(!e[m])return setTimeout(h,j);a=e.getElementsByTagName("script");d=k;for(c in a)a[c].src&&(n[a[c].src]=c);for(c=b.length;c--;)b[c].pop?(a=b[c][0],d=b[c][1],g=b[c][2]):a=b[c],n[a]?d():o(a,d,g);!i&&f()})()}})(this);</pre>
+            <pre class="prettyprint">(function(o){o.include=function(b,f){function j(){}function t(g,b,c){var a,h;/\.css$/.test(g)?(a=d.createElement(p),a.href=g,a.rel="stylesheet",a.type="text/css",d.head.appendChild(a),b()):(k++,a=d.createElement(q),a.onload=a.onreadystatechange=function(d,f){f=0;d=this.readyState||d.type;!d.search("load|complete")&&!h&&(c?(g=function(){o[c]?r(b):setTimeout(g,i);++f>i&&(g=j)})():r(b),m[a.src.split("/").pop()]=f,a.onload=a.onreadystatechange=e.a,a.parentNode&&a.parentNode.removeChild(a),a=e.a,h=i)},a.async=!0,a.src=g,d[s].appendChild(a))}function r(b){function d(){!--k&&f()}b.length?b(d):(b(),d())}var d=document,s="body",m={},k=0,i=1,e=[],q="script",p="link",n;!b.pop&&(b=[b]);f=f||j;(function u(c,a,h,l){if(!d[s])return setTimeout(u,i);e=e.concat(e.slice.call(d.getElementsByTagName(q)),e.slice.call(d.getElementsByTagName(p)));for(c=e.length;c--;)(n=e[c].src||e[c].href)&&(m[n.split("/").pop()]=n);for(c=b.length;c--;)l=j,h=!1,b[c].pop?(a=b[c][0],l=b[c][1],h=b[c][2]):a=b[c],m[a.split("/").pop()]||t(a,l,h);!k&&f()})()}})(this);</pre>
         </div>
     </div>
     
@@ -54,7 +54,7 @@
             <div class="last-update clearfix">
                 <div class="version">
                     <p>Current version</p>
-                    <p class="version-number">1.1.0</p>
+                    <p class="version-number">1.1.3</p>
                     <a href="https://github.com/CapMousse/include.js">clone now</a>
                 </div>
                 <div class="links">
@@ -66,7 +66,7 @@
 				<div class="columns clearfix">
 					<div class="column">
 						<h2>Infos</h2>
-						<p><strong>include.js</strong> is a tiny javascript tool made to load asynchronously Javascript or CSS files when you need them.</p>
+						<p><strong>include.js</strong> is a tiny javascript tool made to load asynchronously Javascript or CSS files when you need them (like a include javascript function).</p>
 						<p>Now that google track page loading time, use this kind of tools can increase your score to appear on the top of results.</p>
 						<p>This kind of tools are also useful for Web APP's, loading script only when user need them.</p>
 					</div>
@@ -74,6 +74,7 @@
 						<h2 id="features">Features</h2>
 						<p><strong>include.js</strong> don't load script that are already loaded in the page, force to load them asynchronously and can control the presence of a javascript object.</p>
 						<p>Each file can have a callback and a general callback can be run when each files are loaded.</p>
+                        <p><strong>include.js</strong> now support nested dependencies, so you can load a file when an other needed file is loaded</p>
 					</div>
 					<div class="column">
 						<h2>Project</h2>
@@ -87,7 +88,11 @@
     "file1.js",
     "style.css",
     ["file2-with-callback.js", function(){ /*do something*/ }],
-    ["jquery-and-callback.js", function(){ /*do something*/ }, "jQuery"]
+    ["jquery-and-callback.js", function(){ /*do something*/ }, "jQuery"],
+    ['other/js/script4.js', function(fn){
+          //Nested dependencies
+          include('other/js/script4sbestfriend', fn);
+    }]
 ], function(){
     //end callback
 });</pre>
