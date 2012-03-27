@@ -10,6 +10,8 @@ Simply add *Include.js* in your project and load it.
 include([
     'script1.js',
     'stylesheet.css',
+    'http://externalsite.com/lib.js', // from external site (starts with http(s))
+    '/scripts/script2.js', // absolute path override baseUrl config (starts with /)
     ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded" }],
     ['other/css/stylesheet2.css', function(){ "do something extraordinary when this file is loaded" }],
     ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile'],
@@ -25,7 +27,31 @@ include([
 });
 ```
 
+Advanced Use
+------------
+
+You can set up your default path to load files declaring:
+
+```
+var baseUrl = '/assets/'
+``` 
+
+as global variable, or adding **data-url** attribute to *include.js* script tag:
+
+```
+<script type="text/javascript" data-url="/assets" src="include.js"></script>
+```
+
+Absolute and complete ( http(s) ) url are not affected from this configuration.
+
+note: after include.js is loaded, you can use ``include.baseUrl`` everywhere.
+
+
+
 Version
+
+#### 1.1.4 (proposed)
+* Add a include.baseUrl global config
 
 #### 1.1.3
 * Memory leak fix (thank to **[jtsoi](https://github.com/jtsoi)**)
