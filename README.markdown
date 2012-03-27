@@ -25,7 +25,24 @@ include([
 });
 ```
 
+Advanced Use
+------------
+
+You can set up your default path to load files declaring:
+```
+var baseUrl = '/assets/'
+``` 
+as global variable, or adding **data-url** attribute to importer script tag:
+```
+&lt;script type="text/javascript" data-url="/assets" src="assets/js/include.js"&gt;&lt;/script&gt;
+```
+note: after include.js is loaded, you can use ``include.baseUrl`` everywhere.
+
+
 Version
+
+#### 1.1.4 (proposed)
+* Add a include.baseUrl global config
 
 #### 1.1.3
 * Memory leak fix (thank to **[jtsoi](https://github.com/jtsoi)**)

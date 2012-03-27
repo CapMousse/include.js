@@ -1,4 +1,4 @@
-//     include.js 1.1.3
+//     include.js 1.1.4
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -11,10 +11,18 @@
      */
     environment['include'] = function(files, callback){
         var doc = document, tags = "getElementsByTagName", body = "body", emptyFn = function(){}, cache = {},
-            scriptCounter = 0, time = 1, array = [], sc = "script", lk = "link", j;
+            scriptCounter = 0, time = 1, array = [], sc = "script", lk = "link", j, baseUrl = "./";
 
         !files.pop&&(files=[files]);
         callback=callback||emptyFn;
+        (baseUrl = environment['baseUrl']||
+            (function() {
+                for (s in (scripts=document.getElementsByTagName("script"))) {
+                    if ( dataPath = scripts[s].getAttribute('data-url') ) { return dataPath; }
+                } return "";
+            })()
+            ) && (baseUrl.charAt(baseUrl.length - 1) !== "/") && (baseUrl += "/");
+        environment['include']['baseUrl'] = baseUrl;
 
         /**
          * create a script/link node with asked file
@@ -26,6 +34,7 @@
          */
         function _create(file, fileCallback, obj, script, loaded, isStyle){
             isStyle = (/\.css$/.test(file));
+            file = (file.charAt(0) === '/' || file.match(/^\w+:/) ? "" : baseUrl) + file;
 
             if(isStyle){
                 script = doc.createElement(lk);
