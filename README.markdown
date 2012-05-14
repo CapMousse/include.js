@@ -1,6 +1,6 @@
 Include.js
 ==========
-A tiny but heavy on-demand async javascript loader (0.4k gziped)
+A tiny but heavy on-demand async javascript loader (0.6k gziped)
 
 How to
 ------
@@ -26,6 +26,13 @@ include([
 ```
 
 Version
+
+#### 1.1.4
+* IE8: Array.slice not working on NodeList (cache work now)
+* IE8: Don't remove script child (prevent non parsing javascript)
+* IE6: Use insertBefore against appendChild
+* Clean code
+* Reintroduce credits on the minified javascript file (version + link)
 
 #### 1.1.3
 * Memory leak fix (thank to **[jtsoi](https://github.com/jtsoi)**)

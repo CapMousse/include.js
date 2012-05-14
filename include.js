@@ -1,4 +1,4 @@
-//     include.js 1.1.3
+//     include.js 1.1.4
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 
@@ -10,8 +10,8 @@
      * @param callback general callback when all files are loaded
      */
     environment['include'] = function(files, callback){
-        var doc = document, tags = "getElementsByTagName", body = "body", emptyFn = function(){}, cache = {},
-            scriptCounter = 0, time = 1, array = [], sc = "script", lk = "link", j;
+        var doc = document, tags = "getElementsByTagName", body = "body", head = doc[tags]('head')[0], emptyFn = function(){}, cache = {},
+            scriptCounter = 0, time = 1, ar = [], sc = "script", lk = "link", j;
 
         !files.pop&&(files=[files]);
         callback=callback||emptyFn;
@@ -32,7 +32,7 @@
                 script.href = file;
                 script.rel = "stylesheet";
                 script.type = "text/css";
-                doc['head'].appendChild(script);
+                head.appendChild(script);
                 fileCallback();
             }else{
                 scriptCounter++;
@@ -58,9 +58,9 @@
                          * tanks to jtsoi & jQuery team
                          * https://github.com/CapMousse/include.js/issues/5
                          */
-                        script.onload = script.onreadystatechange = array._;
-                        script.parentNode&&script.parentNode.removeChild(script);
-                        script = array._;
+                        script.onload = script.onreadystatechange = null;
+                        //script.parentNode&&script.parentNode.removeChild(script);
+                        script = ar._;
 
                         loaded = time;
                     }
@@ -68,7 +68,9 @@
 
                 script.async = !0;
                 script.src = file;
-                doc[body].appendChild(script);
+
+                //prevent IE6 bug
+                head.insertBefore(script, head.firstChild);
             }
         }
 
@@ -83,6 +85,19 @@
         }
 
         /**
+         * Transform a NodeList to an array
+         * Use this becode of IE bug
+         * @param nodeList
+         * @param i
+         * @param arr
+         */
+        function nodeToArray(nodeList, i, arr){
+            for(i=nodeList.length,arr=[];i--;arr.unshift(nodeList[i]));
+
+            return arr
+        }
+
+        /**
          * parse sent script and load them
          * @param i             placeholder for the loops
          * @param script        placeholder for all scripts
@@ -94,13 +109,13 @@
             if(!doc[body]) return setTimeout(include, time);
 
             //transform Nodelist to array and concat them
-            array = array.concat(
-                array.slice.call(doc[tags](sc)),
-                array.slice.call(doc[tags](lk))
+            ar = [].concat(
+                nodeToArray(doc[tags](sc)),
+                nodeToArray(doc[tags](lk))
             );
 
-            for(i=array.length;i--;){
-                j = array[i].src || array[i].href;
+            for(i=ar.length;i--;){
+                j = ar[i].src || ar[i].href;
                 j&&(cache[j.split('/').pop()] = j);
             }
 
