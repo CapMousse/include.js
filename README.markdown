@@ -1,6 +1,6 @@
 Include.js
 ==========
-A tiny but heavy on-demand async javascript loader (0.6k gziped)
+A tiny but heavy on-demand async javascript loader (0.5k gziped)
 
 How to
 ------
@@ -12,7 +12,7 @@ include([
     'stylesheet.css',
     ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded" }],
     ['other/css/stylesheet2.css', function(){ "do something extraordinary when this file is loaded" }],
-    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }, 'ObjectInFile'],
+    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }],
     ['other/js/script4.js', function(fn){
       "Tell include.js when I'm done doing something extraordinary";
       //See, now we can handle dependencies
@@ -26,6 +26,11 @@ include([
 ```
 
 Version
+
+#### 1.2
+* IE(7-8) : fix readyStateChange not working in certain cases
+* All : fix loading not working
+* Drop "object ready verification" (not usefull  in this new version)
 
 #### 1.1.4
 * IE8: Array.slice not working on NodeList (cache work now)
