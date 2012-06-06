@@ -3,11 +3,11 @@
 	url: http://www.capitaine-mousse.Fr
 	Contact: contact [at] jeremybarbe.fr
 	Twitter: @capitainemousse
-	From: Troyes, Aube, France
+	From: Sens, Yonne, France
 
 /* SITE */
-	Last update: 2011/06/29
+	Last update: 2012/06/06
 	Language: English
 	Doctype: HTML5
-	IDE: Sublime Text 2, Wamp, Chrome (Yslow, SpeedTracer)
+	IDE: PHPStorm, Mamp Pro
 	Framework: HTMLBoilerPlate (html, css)

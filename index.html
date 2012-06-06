@@ -45,7 +45,9 @@
         <div class="container">
             <h1>Include.js</h1>
             <h2>A tiny but heavy on-demand async javascript loader</h2>
-            <pre class="prettyprint">(function(p){p.include=function(b,j){function l(){}function u(e,h,c){var a,b;/\.css$/.test(e)?(a=d.createElement(q),a.href=e,a.rel="stylesheet",a.type="text/css",f.appendChild(a),h()):(m++,a=d.createElement(r),a.onload=a.onreadystatechange=function(g,d){d=0;g=this.readyState||g.type;!g.search("load|complete")&&!b&&(c?(e=function(){p[c]?s(h):setTimeout(e,k);++d>k&&(e=l)})():s(h),n[a.src.split("/").pop()]=d,a.onload=a.onreadystatechange=null,a=i.a,b=k)},a.async=!0,a.src=e,f.insertBefore(a,f.firstChild))}function s(e){function b(){!--m&&j()}e.length?e(b):(e(),b())}function t(b){var d,c;d=b.length;for(c=[];d--;c.unshift(b[d]));return c}var d=document,f=d.getElementsByTagName("head")[0],n={},m=0,k=1,i=[],r="script",q="link",o;!b.pop&&(b=[b]);j=j||l;(function h(c,a,f,g){if(!d.body)return setTimeout(h,k);i=[].concat(t(d.getElementsByTagName(r)),t(d.getElementsByTagName(q)));for(c=i.length;c--;)(o=i[c].src||i[c].href)&&(n[o.split("/").pop()]=o);for(c=b.length;c--;)g=l,f=!1,b[c].pop?(a=b[c][0],g=b[c][1],f=b[c][2]):a=b[c],n[a.split("/").pop()]||u(a,g,f);!m&&j()})()}})(this);</pre>
+            <pre class="prettyprint">/* include.js 1.2 | github.com/CapMousse/include.js */
+            (function(j){j.include=function(d,g){function o(){}function j(b,c,a){/\.css$/.test(b)?(a=f.createElement(p),a.href=b,a.rel="stylesheet",a.type="text/css",e.appendChild(a),c()):(k++,a=f.createElement(q),a.onload=function(){r(a,c)},a.onreadystatechange=function(){/loaded|complete/.test(this.readyState)&&r(a,c)},a.async=!0,a.src=b,e.insertBefore(a,e.firstChild))}function r(b,c){t(c);l[b.src.split("/").pop()]=1;b.onload=b.onreadystatechange=null}function t(b){function c(){!--k&&g()}b.length?b(c):(b(),c())}
+            function s(b){var c,a;c=b.length;for(a=[];c--;a.unshift(b[c]));return a}var f=document,e=f.getElementsByTagName("head")[0],l={},k=0,h=[],q="script",p="link",m;!d.pop&&(d=[d]);g=g||o;(function c(a,i,e,n){if(!f.body)return setTimeout(c,1);h=[].concat(s(f.getElementsByTagName(q)),s(f.getElementsByTagName(p)));for(a=h.length;a--;)(m=h[a].src||h[a].href)&&(l[m.split("/").pop()]=m);for(a=d.length;a--;)n=o,e=!1,d[a].pop?(i=d[a][0],n=d[a][1],e=d[a][2]):i=d[a],l[i.split("/").pop()]||j(i,n,e);!k&&g()})()}})(this);</pre>
         </div>
     </div>
     
@@ -54,7 +56,7 @@
             <div class="last-update clearfix">
                 <div class="version">
                     <p>Current version</p>
-                    <p class="version-number">1.1.4</p>
+                    <p class="version-number">1.2</p>
                     <a href="https://github.com/CapMousse/include.js">clone now</a>
                 </div>
                 <div class="links">
@@ -78,7 +80,7 @@
 					</div>
 					<div class="column">
 						<h2>Project</h2>
-						<p><strong>include.js</strong> whas created by <a href="http://www.shwaark.com">Capitaine Mousse</a> (Jérémy Barbe) under the MIT License.</p>
+						<p><strong>include.js</strong> was created by <a href="http://www.shwaark.com">Capitaine Mousse</a> (Jérémy Barbe) under the MIT License.</p>
 						<p>The project is hosted by GitHub and everyone can contribute to this project.</p>
 					</div>
 				</div>
@@ -88,7 +90,7 @@
     "file1.js",
     "style.css",
     ["file2-with-callback.js", function(){ /*do something*/ }],
-    ["jquery-and-callback.js", function(){ /*do something*/ }, "jQuery"],
+    ["jquery-and-callback.js", function(){ /*do something*/ }],
     ['other/js/script4.js', function(fn){
           //Nested dependencies
           include('other/js/script4sbestfriend', fn);
