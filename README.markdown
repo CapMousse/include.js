@@ -1,31 +1,45 @@
-Include.js
+Include.js 2.0
 ==========
-A tiny but heavy on-demand async javascript loader (0.5k gziped)
+Include.js is a tiny javascript module loader with complete support of the Web Module recommandation.
+It's made for browser use and will increase the speed of your pages and the quality of your code.
 
 How to
 ------
-Simply add *Include.js* in your project and load it.
+Simply add *Include.js* in your project and use it.
 
 ```javascript
 include([
-    'script1.js',
-    'stylesheet.css',
-    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded" }],
-    ['other/css/stylesheet2.css', function(){ "do something extraordinary when this file is loaded" }],
-    ['other/js/script3.js', function(){ "do something extraordinary when this file is loaded and the waited object is ready" }],
-    ['other/js/script4.js', function(fn){
-      "Tell include.js when I'm done doing something extraordinary";
-      //See, now we can handle dependencies
-      include('other/js/script4sbestfriend', fn);
-      //Now, once script4 is loaded, script4's best friend, who depends on script4 can be loaded too
-      //...and once it's done loading, it will signal to its parent by running fn
-    }]
-], function(){
+    'User/Profil',
+    'User/Account',
+    'Sidebar/Search'
+], function(profil, account, search){
     //do something extraordinary when all files successfuly loaded
 });
 ```
 
+Each file can have multiple dependencies. Include.js will automaticly load them and wait until all is ready before launching your code !
+
+Example for `User/Profil` :
+```javascript
+include([
+    'User/Interface',
+    'User/Security',
+    'User/Api'
+], function(Interface, Security, Api){
+  return {
+    Interface : new Interface,
+    Security : new Security,
+    Api: new Api
+  };
+});
+```
+
 Version
+
+#### 2.0-alpha
+* Completely rewrite the code
+* Support Web Module definition
+* Real dependencies support
 
 #### 1.2
 * IE(7-8) : fix readyStateChange not working in certain cases

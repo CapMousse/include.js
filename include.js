@@ -1,143 +1,202 @@
-//     include.js 1.2
+//     include.js 2.0-alpha
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
-
-(function(environment){
+//     
+var include;
+(function (environment) {
+    /**
+     * List a existings modules
+     * @type {Object}
+     */
+    var modules = {};
 
     /**
-     * load asked file
-     * @param files array of files to be loaded
-     * @param callback general callback when all files are loaded
+     * Array of waiting modules
+     * @type {Array}
      */
-    environment.include = function(files, callback){
-        var doc = document, tags = "getElementsByTagName", head = doc[tags]('head')[0], emptyFn = function(){}, cache = {},
-            scriptCounter = 0, time = 1, ar = [], sc = "script", lk = "link", j;
+    var waitingModules = [];
 
-        !files.pop&&(files=[files]);
-        callback=callback||emptyFn;
+    /**
+     * Base element check for IE 6-8
+     * @type {[type]}
+     */
+    var baseElement = document.getElementsByTagName('base')[0];
 
-        /**
-         * create a script/link node with asked file
-         * @param   {String}    file            the file
-         * @param   {Function}  fileCallback    the callback for the current script
-         * @param   {Undefined} script          placeholder for the script element
-         * @param   {Undefined} isStyle         placeholder for the style detection
-         * @return  void
-         */
-        function _create(file, fileCallback, script, isStyle){
-            isStyle = (/\.css$/.test(file));
+    /**
+     * Loop trougth an array of element with the given function
+     * @param  {Array}    array    array to loop       
+     * @param  {Function} callback function to execute with each element
+     */
+    function each(array, callback) {
+        var i;
 
-            if(isStyle){
-                script = doc.createElement(lk);
-                script.href = file;
-                script.rel = "stylesheet";
-                script.type = "text/css";
-                head.appendChild(script);
-                fileCallback();
-            }else{
-                scriptCounter++;
-                script = doc.createElement(sc);
-
-                script.onload = function(){
-                    finish(script, fileCallback);
-                };
-
-                script.onreadystatechange = function(){
-                    //search the loaded or complete expression
-                    /loaded|complete/.test(this.readyState)&&finish(script, fileCallback);
-
-                };
-
-                script.async = !0;
-                script.src = file;
-
-                //prevent IE6 bug
-                head.insertBefore(script, head.firstChild);
+        for (i = 0; i < array.length; i++) {
+            if (array[i] && callback(array[i], i, array)) {
+                break;
             }
         }
-
-        /**
-         * Execute callback of each loaded files
-         *
-         * @param {Element} script
-         * @param {Function} callBack
-         *
-         * @return void
-         */
-        function finish(script, callBack) {
-            _countFiles(callBack);
-            cache[script.src.split('/').pop()] = 1;
-
-            /*
-             * memory leak fix
-             * tanks to jtsoi & jQuery team
-             * https://github.com/CapMousse/include.js/issues/5
-             */
-            script.onload = script.onreadystatechange = null;
-            //script.parentNode&&script.parentNode.removeChild(script);
-            script = ar._;
-        }
-
-        /**
-         * count files loaded and launch callback
-         * @param {Function} fileCallback  callback of the current file
-         * @return void
-         */
-        function _countFiles(fileCallback){
-            function waitFn() {!--scriptCounter&&callback()}
-            fileCallback.length ? fileCallback(waitFn) : (fileCallback(), waitFn());
-        }
-
-        /**
-         * Transform a NodeList to an array
-         * Use this becose of IE bug
-         * @param {NodeList} nodeList
-         * @param i
-         * @param arr
-         */
-        function nodeToArray(nodeList, i, arr){
-            //we only need a for without body to parse nodelish to array. Simple and fast ! (and super strange for newbies)
-            for(i=nodeList.length,arr=[];i--;arr.unshift(nodeList[i]));
-            return arr
-        }
-
-        /**
-         * parse sent script and load them
-         * @param i             placeholder for the loops
-         * @param script        placeholder for all scripts
-         * @param obj           placeholder for the aksed object
-         * @param callbackFile  placholder for the callback function
-         * @return void
-         */
-        (function include(i, script, obj, callbackFile){
-            if(!doc.body) return setTimeout(include, time);
-
-            //transform Nodelist to array and concat them
-            ar = [].concat(
-                nodeToArray(doc[tags](sc)),
-                nodeToArray(doc[tags](lk))
-            );
-
-            for(i=ar.length;i--;){
-                j = ar[i].src || ar[i].href;
-                j&&(cache[j.split('/').pop()] = j);
-            }
-
-            for(i=files.length;i--;){
-                callbackFile = emptyFn;
-                obj = !1;
-
-                files[i].pop?
-                    (script = files[i][0], callbackFile = files[i][1], obj = files[i][2]):
-                    (script = files[i]);
-
-                //don't load script if already loaded
-                cache[script.split('/').pop()]||_create(script, callbackFile, obj);
-            }
-
-
-            !scriptCounter&&callback()
-        })()
     }
+
+    function cleanWaiting() {
+        var toClean = [];
+
+        each(waitingModules, function (module, i) {
+            if (module[3] === true) {
+                toClean.push(i);
+            }
+        });
+
+        each(toClean, function (clean, i) {
+            waitingModules.splice(clean - i, 1);
+        });
+    }
+
+    /**
+     * Check if a module is loaded
+     */
+    function checkModuleLoaded() {
+        each(waitingModules, function (module, i) {
+            var dependencies = module[0],
+                args         = [],
+                name         = module[2],
+                exec;
+
+            if (module[3] === true) {
+                return;
+            }
+
+            each(dependencies, function (dependencie) {
+                if (modules[dependencie] !== undefined) {
+                    args.push(modules[dependencie]);
+                }
+            });
+
+            if (dependencies.length === args.length || dependencies.length === 0) {
+                exec = module[1].apply(this, args);
+                module.push(true);
+
+                if (name !== undefined) {
+                    modules[name] = exec;
+                }
+
+                if (name === undefined && i === waitingModules.length - 1) {
+                    waitingModules = [];
+                }
+            }
+        });
+    }
+
+    /**
+     * On Load event
+     * @param  {Event}      event  event of the load
+     */
+    function onLoad(event) {
+        if (event.type !== "load" && !/load|complete/.test(this.readystate)) {
+            return;
+        }
+
+        if (this.attachEvent) {
+            this.detachEvent('onreadystatechange', onLoad);
+        } else {
+            this.removeEventListener('load', onLoad);
+        }
+
+        waitingModules[0].push(this.getAttribute('data-module'));
+
+        checkModuleLoaded();
+    }
+
+    /**
+     * Attach events to a script tags
+     * @param {Element} script     script to attach event
+     * @param {String}  moduleName module to load
+     */
+    function attachEvents(script, moduleName) {
+        if (script.attachEvent) {
+            script.attachEvent('onreadystatechange', onLoad);
+        } else {
+            script.addEventListener('load', onLoad, false);
+        }
+    }
+
+    /**
+     * Check if a script already load
+     * @param  {String} moduleName module to load
+     */
+    function checkScripts(moduleName) {
+        var script = false;
+
+        each(document.getElementsByTagName('script'), function (elem, i) {
+            if (elem.getAttribute('data-module') && elem.getAttribute('data-module') === moduleName) {
+                script = elem;
+                return false;
+            }
+        });
+
+        return script;
+    }
+
+    /**
+     * Create a script element to load asked module
+     * @param  {String} file       name of the file
+     * @param  {String} moduleName name of the module
+     */
+    function create(file, moduleName) {
+        var script = checkScripts(moduleName);
+
+        if (script) {
+            return;
+        }
+
+        script = document.createElement('script');
+
+        script.async = true;
+        script.type = "text/javascript";
+        script.src = file;
+        script.setAttribute('data-module', moduleName);
+
+        if (baseElement) {
+            //prevent IE 6-8 bug (script executed before appenchild execution)
+            baseElement.parentNode.insertBefore(script, baseElement);
+        } else {
+            document.head.appendChild(script);
+        }
+
+        attachEvents(script, moduleName);
+    }
+
+    /**
+     * Parse a file to include
+     * @param  String file file to parse
+     * @param  Number i    index of file
+     */
+    function parseFiles(file, index) {
+        var moduleName = file;
+
+        if (modules[moduleName]) {
+            return;
+        }
+
+        if (!/\.js/.test(file)) {
+            file = file + '.js';
+        }
+
+        create(file, moduleName);
+    }
+
+    /**
+     * @param {Array}    files    array of files to be loaded
+     * @param {Function} callback general callback when all files are loaded
+     */
+    include = function (files, callback) {
+        // Check if only callback is defined
+        if (typeof files === "function" && callback === undefined) {
+            waitingModules.unshift([[], files]);
+            return;
+        }
+
+        waitingModules.unshift([files, callback]);
+        each(files, parseFiles);
+    };
 
 })(this);
