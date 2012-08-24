@@ -23,6 +23,12 @@ var include;
     var baseElement = document.getElementsByTagName('base')[0];
 
     /**
+     * Permit to check if script is normal script or module
+     * @type {Object}
+     */
+    var scriptCounter = {};
+
+    /**
      * Loop trougth an array of element with the given function
      * @param  {Array}    array    array to loop       
      * @param  {Function} callback function to execute with each element
@@ -37,31 +43,17 @@ var include;
         }
     }
 
-    function cleanWaiting() {
-        var toClean = [];
-
-        each(waitingModules, function (module, i) {
-            if (module[3] === true) {
-                toClean.push(i);
-            }
-        });
-
-        each(toClean, function (clean, i) {
-            waitingModules.splice(clean - i, 1);
-        });
-    }
-
     /**
      * Check if a module is loaded
      */
     function checkModuleLoaded() {
         each(waitingModules, function (module, i) {
-            var dependencies = module[0],
-                args         = [],
-                name         = module[2],
-                exec;
+            var name         = module[0], 
+                dependencies = module[1],
+                exec         = module[2],
+                args         = [];
 
-            if (module[3] === true) {
+            if (module[3] === true && (name === null || modules[name] !== undefined)) {
                 return;
             }
 
@@ -72,14 +64,15 @@ var include;
             });
 
             if (dependencies.length === args.length || dependencies.length === 0) {
-                exec = module[1].apply(this, args);
+                exec = exec.apply(this, args);
                 module.push(true);
 
-                if (name !== undefined) {
+                if (name !== null) {
                     modules[name] = exec;
+
                 }
 
-                if (name === undefined && i === waitingModules.length - 1) {
+                if (name === null && i === waitingModules.length - 1) {
                     waitingModules = [];
                 }
             }
@@ -101,7 +94,11 @@ var include;
             this.removeEventListener('load', onLoad);
         }
 
-        waitingModules[0].push(this.getAttribute('data-module'));
+        if(scriptCounter[this.getAttribute('data-module')] >= waitingModules.length){
+            modules[this.getAttribute('data-module')] = 0;
+        } else if(waitingModules[0][0] === null){
+            waitingModules[0][0] = this.getAttribute('data-module');    
+        }        
 
         checkModuleLoaded();
     }
@@ -109,9 +106,8 @@ var include;
     /**
      * Attach events to a script tags
      * @param {Element} script     script to attach event
-     * @param {String}  moduleName module to load
      */
-    function attachEvents(script, moduleName) {
+    function attachEvents(script) {
         if (script.attachEvent) {
             script.attachEvent('onreadystatechange', onLoad);
         } else {
@@ -162,7 +158,9 @@ var include;
             document.head.appendChild(script);
         }
 
-        attachEvents(script, moduleName);
+        scriptCounter[moduleName] = waitingModules.length;
+
+        attachEvents(script);
     }
 
     /**
@@ -178,6 +176,7 @@ var include;
         }
 
         if (!/\.js/.test(file)) {
+            file = file.replace('.', '/');
             file = file + '.js';
         }
 
@@ -185,18 +184,29 @@ var include;
     }
 
     /**
-     * @param {Array}    files    array of files to be loaded
-     * @param {Function} callback general callback when all files are loaded
+     * @param {String}   name     the name of the module
+     * @param {Array}    deps     dependencies of the module
+     * @param {Function} module   module definition
      */
-    include = function (files, callback) {
-        // Check if only callback is defined
-        if (typeof files === "function" && callback === undefined) {
-            waitingModules.unshift([[], files]);
-            return;
+    include = function (name, deps, module) {
+        if(typeof name !== "string"){
+            module = deps;
+            deps = name;
+            name = null;
         }
 
-        waitingModules.unshift([files, callback]);
-        each(files, parseFiles);
+        if (typeof deps !== "object") {
+            module = deps;
+            deps = [];
+        }
+
+        waitingModules.unshift([name, deps, module]);
+
+        if(deps.length){
+            each(deps, parseFiles);    
+        }else{
+            checkModuleLoaded();
+        }        
     };
 
 })(this);
