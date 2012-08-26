@@ -1,1 +1,1 @@
-window.$ = true;
+window.$ = 'a';

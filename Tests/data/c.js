@@ -1,3 +1,3 @@
 include(function(){
-    return true;
+    return 'c';
 })

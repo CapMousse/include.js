@@ -10,8 +10,6 @@ describe("Include", function(){
             });
         });
 
-
-
         waitsFor(function() {
             return test;
         }, "Include can't launch anonymous function", 500);
@@ -20,6 +18,7 @@ describe("Include", function(){
             expect(test).toBe(true);
         })
     });
+
 
     it("should be able to load normal javascript", function(){
         runs(function(){
@@ -35,10 +34,11 @@ describe("Include", function(){
         }, "Include can't load normal javascript", 500);
 
         runs(function() {
-            expect(test).toBe(true);
+            expect(test).toBe('a');
         })
 
     });
+
 
     it("should be able to load javascript module with normal URL", function(){
         runs(function(){
@@ -55,9 +55,10 @@ describe("Include", function(){
         }, "Include can't javascript module with normal URL", 500);
 
         runs(function() {
-            expect(test).toBe(true);
+            expect(test).toBe('b');
         })
     });
+
 
     it("should be able to load javascript module with module name", function(){
         runs(function(){
@@ -72,6 +73,66 @@ describe("Include", function(){
         waitsFor(function() {
             return test;
         }, "Include can't javascript module with module name", 500);
+
+        runs(function() {
+            expect(test).toBe('c');
+        })
+    });
+
+
+    it("should be able to reload module", function(){
+        runs(function(){
+            test = false;
+            
+
+            include(['data.c'], function(c){
+                test = c;
+            });
+        });
+
+        waitsFor(function() {
+            return test;
+        }, "Include can't reload module", 500);
+
+        runs(function() {
+            expect(test).toBe('c');
+        })
+    });
+
+
+    it("should be able to load nested dependencies", function(){
+        runs(function(){
+            test = false;
+            
+
+            include(['data.d'], function(d){
+                test = d.e;
+            });
+        });
+
+        waitsFor(function() {
+            return test;
+        }, "Include can't load nested dependencies", 500);
+
+        runs(function() {
+            expect(test).toBe('e');
+        })
+    });
+
+
+    it("should be able to load nested dependencies with normal scripts", function(){
+        runs(function(){
+            test = false;
+            
+
+            include(['data.f'], function(f){
+                test = f;
+            });
+        });
+
+        waitsFor(function() {
+            return test;
+        }, "Include can't load nested dependencies", 500);
 
         runs(function() {
             expect(test).toBe(true);

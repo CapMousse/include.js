@@ -16,17 +16,13 @@ var include;
      */
     var waitingModules = [];
 
+    var scriptCounter = 1;
+
     /**
      * Base element check for IE 6-8
      * @type {[type]}
      */
     var baseElement = document.getElementsByTagName('base')[0];
-
-    /**
-     * Permit to check if script is normal script or module
-     * @type {Object}
-     */
-    var scriptCounter = {};
 
     /**
      * Loop trougth an array of element with the given function
@@ -74,6 +70,7 @@ var include;
 
                 if (name === null && i === waitingModules.length - 1) {
                     waitingModules = [];
+                    scriptCounter = 1;
                 }
             }
         });
@@ -88,17 +85,21 @@ var include;
             return;
         }
 
+        var name = this.getAttribute('data-module');
+        var count = this.getAttribute('data-count');
+        this.setAttribute('data-loaded', true);
+
         if (this.attachEvent) {
             this.detachEvent('onreadystatechange', onLoad);
         } else {
             this.removeEventListener('load', onLoad);
         }
 
-        if(scriptCounter[this.getAttribute('data-module')] >= waitingModules.length){
-            modules[this.getAttribute('data-module')] = 0;
+        if(count > waitingModules.length){
+            modules[name] = scriptCounter--;
         } else if(waitingModules[0][0] === null){
-            waitingModules[0][0] = this.getAttribute('data-module');    
-        }        
+            waitingModules[0][0] = name;    
+        }
 
         checkModuleLoaded();
     }
@@ -144,12 +145,16 @@ var include;
             return;
         }
 
+        scriptCounter++;
+
         script = document.createElement('script');
 
         script.async = true;
         script.type = "text/javascript";
         script.src = file;
         script.setAttribute('data-module', moduleName);
+        script.setAttribute('data-count',  scriptCounter);
+        script.setAttribute('data-loaded', false);
 
         if (baseElement) {
             //prevent IE 6-8 bug (script executed before appenchild execution)
@@ -157,8 +162,6 @@ var include;
         } else {
             document.head.appendChild(script);
         }
-
-        scriptCounter[moduleName] = waitingModules.length;
 
         attachEvents(script);
     }
@@ -172,6 +175,7 @@ var include;
         var moduleName = file;
 
         if (modules[moduleName]) {
+            checkModuleLoaded();
             return;
         }
 
@@ -202,11 +206,11 @@ var include;
 
         waitingModules.unshift([name, deps, module]);
 
+        checkModuleLoaded()
+
         if(deps.length){
-            each(deps, parseFiles);    
-        }else{
-            checkModuleLoaded();
-        }        
+            each(deps, parseFiles);
+        } 
     };
 
 })(this);
