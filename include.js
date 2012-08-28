@@ -1,9 +1,10 @@
-//     include.js 2.0-alpha
+//     include.js 2.0
 //     (c) 2011 Jérémy Barbe.
 //     May be freely distributed under the MIT license.
 //     
 var include;
 (function (environment) {
+
     /**
      * List a existings modules
      * @type {Object}
@@ -26,7 +27,7 @@ var include;
 
     /**
      * Loop trougth an array of element with the given function
-     * @param  {Array}    array    array to loop       
+     * @param  {Array|NodeList}    array    array to loop       
      * @param  {Function} callback function to execute with each element
      */
     function each(array, callback) {
@@ -44,7 +45,7 @@ var include;
      */
     function checkModuleLoaded() {
         each(waitingModules, function (module, i) {
-            var name         = module[0], 
+            var name         = module[0],
                 dependencies = module[1],
                 exec         = module[2],
                 args         = [];
@@ -95,10 +96,10 @@ var include;
             this.removeEventListener('load', onLoad);
         }
 
-        if(count > waitingModules.length){
+        if (count > waitingModules.length) {
             modules[name] = scriptCounter--;
-        } else if(waitingModules[0][0] === null){
-            waitingModules[0][0] = name;    
+        } else if (waitingModules[0][0] === null) {
+            waitingModules[0][0] = name;
         }
 
         checkModuleLoaded();
@@ -168,8 +169,8 @@ var include;
 
     /**
      * Parse a file to include
-     * @param  String file file to parse
-     * @param  Number i    index of file
+     * @param  {String} file file to parse
+     * @param  {Number} i    index of file
      */
     function parseFiles(file, index) {
         var moduleName = file;
@@ -193,7 +194,7 @@ var include;
      * @param {Function} module   module definition
      */
     include = function (name, deps, module) {
-        if(typeof name !== "string"){
+        if (typeof name !== "string") {
             module = deps;
             deps = name;
             name = null;
@@ -206,11 +207,11 @@ var include;
 
         waitingModules.unshift([name, deps, module]);
 
-        checkModuleLoaded()
+        checkModuleLoaded();
 
-        if(deps.length){
+        if (deps.length) {
             each(deps, parseFiles);
-        } 
+        }
     };
 
 })(this);

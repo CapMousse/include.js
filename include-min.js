@@ -1,4 +1,4 @@
-/* include.js 2.0-aplha | github.com/CapMousse/include.js */
+/* include.js 2.0 | github.com/CapMousse/include.js */
 var include;
 (function(){function g(a,c){var b;for(b=0;b<a.length&&(!a[b]||!c(a[b],b,a));b++);}function i(){g(d,function(a,c){var b=a[0],j=a[1],k=a[2],e=[];if(!(!0===a[3]&&(null===b||void 0!==f[b])))if(g(j,function(a){void 0!==f[a]&&e.push(f[a])}),j.length===e.length||0===j.length)k=k.apply(this,e),a.push(!0),null!==b&&(f[b]=k),null===b&&c===d.length-1&&(d=[],h=1)})}function e(a){if("load"===a.type||/load|complete/.test(this.readystate)){var a=this.getAttribute("data-module"),c=this.getAttribute("data-count");this.setAttribute("data-loaded",
 !0);this.attachEvent?this.detachEvent("onreadystatechange",e):this.removeEventListener("load",e);c>d.length?f[a]=h--:null===d[0][0]&&(d[0][0]=a);i()}}function m(a){var c=a;if(f[c])i();else{/\.js/.test(a)||(a=a.replace(".","/"),a+=".js");var b,d=!1;g(document.getElementsByTagName("script"),function(a){if(a.getAttribute("data-module")&&a.getAttribute("data-module")===c){d=a;return false}});d||(h++,b=document.createElement("script"),b.async=!0,b.type="text/javascript",b.src=a,b.setAttribute("data-module",
