@@ -1,7 +1,9 @@
-//     include.js 2.0
-//     (c) 2011 Jérémy Barbe.
-//     May be freely distributed under the MIT license.
-//     
+// ==================================================================
+// Project:        Include.js - Javascript loader
+// Copyright:      ©2011-2012 Jérémy Barbe and contributors
+// Licence:        Licence under MIT license (see license.md)
+// ==================================================================
+
 var include;
 (function (environment) {
 
