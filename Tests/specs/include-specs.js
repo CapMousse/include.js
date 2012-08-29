@@ -138,4 +138,24 @@ describe("Include", function(){
             expect(test).toBe(true);
         })
     });
+
+
+    it("should be able to load external scripts", function(){
+        runs(function(){
+            test = false;
+            
+
+            include(['http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js'], function(){
+                test = jQuery&&true;
+            });
+        });
+
+        waitsFor(function() {
+            return test;
+        }, "Include can't load externak scripts", 800);
+
+        runs(function() {
+            expect(test).toBe(true);
+        })
+    });
 });
