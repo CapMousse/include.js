@@ -8,10 +8,10 @@ It don't work like other javascript load, such as RequireJS, LABjs...
 2. It provide only **one method** to do all the work `include()`: define module, load scripts …
 3. It's **for browser**, not for server such as *Node.js*
 
-. Chrome ................... √
-. Opera .................... √
-. Safari ................... √
-. IE ....................... √ (IE 7+)
+- Chrome ................... √
+- Opera .................... √
+- Safari ................... √
+- IE ....................... √ (IE 7+)
 
 ## How to use
 
