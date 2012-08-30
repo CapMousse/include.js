@@ -1,17 +1,15 @@
 # Include.js
 
-Include.js is a Javascript loader. It can load normal javascript files but is more efficient with **web modules**.
+**Include.js** is a tiny (800b minified and gziped) Javascript loader. It can load normal javascript files but is more efficient with **web modules**.
 
-It don't work like other javascript load, such as RequireJS, LABjs...
+When it's possible, it will use async loading to speed up you page and will ensure the good executions of your script. It support **nested dependencies**, a useful feature to create clean and flexible javascript application.
 
-1. It's a light javascript file, **800Kb Gziped and compressed with Closure Compiler**, speed up page loading !
-2. It provide only **one method** to do all the work `include()`: define module, load scripts …
-3. It's **for browser**, not for server such as *Node.js*
+Include.js was tested on :
 
-- Chrome ................... √
-- Opera .................... √
-- Safari ................... √
-- IE ....................... √ (IE 7+)
+- Chrome √
+- Opera √
+- Safari √
+- IE √ (IE 7+)
 
 ## How to use
 
