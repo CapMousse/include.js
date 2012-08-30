@@ -19,13 +19,23 @@ var include;
      */
     var waitingModules = [];
 
+    /**
+     * Count created script for control
+     * @type {Number}
+     */
     var scriptCounter = 1;
 
     /**
      * Base element check for IE 6-8
-     * @type {[type]}
+     * @type {Node}
      */
     var baseElement = document.getElementsByTagName('base')[0];
+
+    /**
+     * Head element
+     * @type {Node}
+     */
+    var head = document.getElementsByTagName('head')[0];
 
     /**
      * Loop trougth an array of element with the given function
@@ -52,10 +62,6 @@ var include;
                 exec         = module[2],
                 args         = [];
 
-            if (module[3] === true && (name === null || modules[name] !== undefined)) {
-                return;
-            }
-
             each(dependencies, function (dependencie) {
                 if (modules[dependencie] !== undefined) {
                     args.push(modules[dependencie]);
@@ -68,10 +74,9 @@ var include;
 
                 if (name !== null) {
                     modules[name] = exec;
-
                 }
 
-                if (name === null && i === waitingModules.length - 1) {
+                if (name === null && i+1 === waitingModules.length) {
                     waitingModules = [];
                     scriptCounter = 1;
                 }
@@ -84,20 +89,27 @@ var include;
      * @param  {Event}      event  event of the load
      */
     function onLoad(event) {
-        if (event.type !== "load" && !/load|complete/.test(this.readystate)) {
+        var target = (event.currentTarget || event.srcElement),
+            name,
+            count;
+
+        //Check if the script is realy loaded and executed ! (Fuck you IE with your "Loaded but not realy, wait to be completed")
+        if (event.type !== "load" && target.readyState != "complete") {
             return;
         }
 
-        var name = this.getAttribute('data-module');
-        var count = this.getAttribute('data-count');
-        this.setAttribute('data-loaded', true);
+        name = target.getAttribute('data-module');
+        count = target.getAttribute('data-count');
+        target.setAttribute('data-loaded', true);
 
-        if (this.attachEvent) {
-            this.detachEvent('onreadystatechange', onLoad);
+        // Old browser need to use the detachEvent method
+        if (target.attachEvent) {
+            target.detachEvent('onreadystatechange', onLoad);
         } else {
-            this.removeEventListener('load', onLoad);
+            target.removeEventListener('load', onLoad);
         }
 
+        // Is this script add a waiting module ? If not, that's a "normal" script file
         if (count > waitingModules.length) {
             modules[name] = scriptCounter--;
         } else if (waitingModules[0][0] === null) {
@@ -142,41 +154,43 @@ var include;
      * @param  {String} moduleName name of the module
      */
     function create(file, moduleName) {
-        var script = checkScripts(moduleName);
+        //SetTimeout prevent the "OMG RUN, CREATE THE SCRIPT ELEMENT, YOU FOOL" browser rush
+        setTimeout(function(){
+            var script = checkScripts(moduleName);
+            if (script) {
+                return;
+            }
 
-        if (script) {
-            return;
-        }
+            scriptCounter++;
 
-        scriptCounter++;
+            script = document.createElement('script');
 
-        script = document.createElement('script');
+            script.async = true;
+            script.type = "text/javascript";
+            script.src = file;
+            script.setAttribute('data-module', moduleName);
+            script.setAttribute('data-count',  scriptCounter);
+            script.setAttribute('data-loaded', false);
 
-        script.async = true;
-        script.type = "text/javascript";
-        script.src = file;
-        script.setAttribute('data-module', moduleName);
-        script.setAttribute('data-count',  scriptCounter);
-        script.setAttribute('data-loaded', false);
+            if (baseElement) {
+                //prevent IE 6-8 bug (script executed before appenchild execution. Yeah, that's realy SUCK)
+                baseElement.parentNode.insertBefore(script, baseElement);
+            } else {
+                head.appendChild(script);
+            }
 
-        if (baseElement) {
-            //prevent IE 6-8 bug (script executed before appenchild execution)
-            baseElement.parentNode.insertBefore(script, baseElement);
-        } else {
-            document.head.appendChild(script);
-        }
-
-        attachEvents(script);
+            attachEvents(script);
+        }, 0);
     }
 
     /**
      * Parse a file to include
-     * @param  {String} file file to parse
-     * @param  {Number} i    index of file
+     * @param  {String} file  file to parse
      */
-    function parseFiles(file, index) {
+    function parseFiles(file) {
         var moduleName = file;
 
+        //Don't load module already loaded
         if (modules[moduleName]) {
             checkModuleLoaded();
             return;

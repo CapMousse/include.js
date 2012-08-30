@@ -152,7 +152,7 @@ describe("Include", function(){
 
         waitsFor(function() {
             return test;
-        }, "Include can't load externak scripts", 800);
+        }, "Include can't load externak scripts", 2000);
 
         runs(function() {
             expect(test).toBe(true);

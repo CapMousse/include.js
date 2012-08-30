@@ -4,9 +4,14 @@ Include.js is a Javascript loader. It can load normal javascript files but is mo
 
 It don't work like other javascript load, such as RequireJS, LABjs...
 
-1. It's a **light javascript file**, speed up page loading !
+1. It's a light javascript file, **800Kb Gziped and compressed with Closure Compiler**, speed up page loading !
 2. It provide only **one method** to do all the work `include()`: define module, load scripts …
 3. It's **for browser**, not for server such as *Node.js*
+
+. Chrome ................... √
+. Opera .................... √
+. Safari ................... √
+. IE ....................... √ (IE 7+)
 
 ## How to use
 
@@ -43,7 +48,6 @@ include('App.Nasa', ['App/Rover.js', 'App.Planet'], function(Rover, Planet){
   }
 });
 ```
-
 
 ## Tests
 
