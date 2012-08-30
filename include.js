@@ -1,143 +1,233 @@
-//     include.js 1.2
-//     (c) 2011 Jérémy Barbe.
-//     May be freely distributed under the MIT license.
+// ==================================================================
+// Project:        Include.js - Javascript loader
+// Copyright:      ©2011-2012 Jérémy Barbe and contributors
+// Licence:        Licence under MIT license (see license.md)
+// ==================================================================
 
-(function(environment){
+var include;
+(function (environment) {
 
     /**
-     * load asked file
-     * @param files array of files to be loaded
-     * @param callback general callback when all files are loaded
+     * List a existings modules
+     * @type {Object}
      */
-    environment.include = function(files, callback){
-        var doc = document, tags = "getElementsByTagName", head = doc[tags]('head')[0], emptyFn = function(){}, cache = {},
-            scriptCounter = 0, time = 1, ar = [], sc = "script", lk = "link", j;
+    var modules = {};
 
-        !files.pop&&(files=[files]);
-        callback=callback||emptyFn;
+    /**
+     * Array of waiting modules
+     * @type {Array}
+     */
+    var waitingModules = [];
 
-        /**
-         * create a script/link node with asked file
-         * @param   {String}    file            the file
-         * @param   {Function}  fileCallback    the callback for the current script
-         * @param   {Undefined} script          placeholder for the script element
-         * @param   {Undefined} isStyle         placeholder for the style detection
-         * @return  void
-         */
-        function _create(file, fileCallback, script, isStyle){
-            isStyle = (/\.css$/.test(file));
+    /**
+     * Count created script for control
+     * @type {Number}
+     */
+    var scriptCounter = 1;
 
-            if(isStyle){
-                script = doc.createElement(lk);
-                script.href = file;
-                script.rel = "stylesheet";
-                script.type = "text/css";
-                head.appendChild(script);
-                fileCallback();
-            }else{
-                scriptCounter++;
-                script = doc.createElement(sc);
+    /**
+     * Base element check for IE 6-8
+     * @type {Node}
+     */
+    var baseElement = document.getElementsByTagName('base')[0];
 
-                script.onload = function(){
-                    finish(script, fileCallback);
-                };
+    /**
+     * Head element
+     * @type {Node}
+     */
+    var head = document.getElementsByTagName('head')[0];
 
-                script.onreadystatechange = function(){
-                    //search the loaded or complete expression
-                    /loaded|complete/.test(this.readyState)&&finish(script, fileCallback);
+    /**
+     * Loop trougth an array of element with the given function
+     * @param  {Array|NodeList}    array    array to loop       
+     * @param  {Function} callback function to execute with each element
+     */
+    function each(array, callback) {
+        var i;
 
-                };
-
-                script.async = !0;
-                script.src = file;
-
-                //prevent IE6 bug
-                head.insertBefore(script, head.firstChild);
+        for (i = 0; i < array.length; i++) {
+            if (array[i] && callback(array[i], i, array)) {
+                break;
             }
         }
-
-        /**
-         * Execute callback of each loaded files
-         *
-         * @param {Element} script
-         * @param {Function} callBack
-         *
-         * @return void
-         */
-        function finish(script, callBack) {
-            _countFiles(callBack);
-            cache[script.src.split('/').pop()] = 1;
-
-            /*
-             * memory leak fix
-             * tanks to jtsoi & jQuery team
-             * https://github.com/CapMousse/include.js/issues/5
-             */
-            script.onload = script.onreadystatechange = null;
-            //script.parentNode&&script.parentNode.removeChild(script);
-            script = ar._;
-        }
-
-        /**
-         * count files loaded and launch callback
-         * @param {Function} fileCallback  callback of the current file
-         * @return void
-         */
-        function _countFiles(fileCallback){
-            function waitFn() {!--scriptCounter&&callback()}
-            fileCallback.length ? fileCallback(waitFn) : (fileCallback(), waitFn());
-        }
-
-        /**
-         * Transform a NodeList to an array
-         * Use this becose of IE bug
-         * @param {NodeList} nodeList
-         * @param i
-         * @param arr
-         */
-        function nodeToArray(nodeList, i, arr){
-            //we only need a for without body to parse nodelish to array. Simple and fast ! (and super strange for newbies)
-            for(i=nodeList.length,arr=[];i--;arr.unshift(nodeList[i]));
-            return arr
-        }
-
-        /**
-         * parse sent script and load them
-         * @param i             placeholder for the loops
-         * @param script        placeholder for all scripts
-         * @param obj           placeholder for the aksed object
-         * @param callbackFile  placholder for the callback function
-         * @return void
-         */
-        (function include(i, script, obj, callbackFile){
-            if(!doc.body) return setTimeout(include, time);
-
-            //transform Nodelist to array and concat them
-            ar = [].concat(
-                nodeToArray(doc[tags](sc)),
-                nodeToArray(doc[tags](lk))
-            );
-
-            for(i=ar.length;i--;){
-                j = ar[i].src || ar[i].href;
-                j&&(cache[j.split('/').pop()] = j);
-            }
-
-            for(i=files.length;i--;){
-                callbackFile = emptyFn;
-                obj = !1;
-
-                files[i].pop?
-                    (script = files[i][0], callbackFile = files[i][1], obj = files[i][2]):
-                    (script = files[i]);
-
-                //don't load script if already loaded
-                cache[script.split('/').pop()]||_create(script, callbackFile, obj);
-            }
-
-
-            !scriptCounter&&callback()
-        })()
     }
+
+    /**
+     * Check if a module is loaded
+     */
+    function checkModuleLoaded() {
+        each(waitingModules, function (module, i) {
+            var name         = module[0],
+                dependencies = module[1],
+                exec         = module[2],
+                args         = [];
+
+            each(dependencies, function (dependencie) {
+                if (modules[dependencie] !== undefined) {
+                    args.push(modules[dependencie]);
+                }
+            });
+
+            if (dependencies.length === args.length || dependencies.length === 0) {
+                exec = exec.apply(this, args);
+                module.push(true);
+
+                if (name !== null) {
+                    modules[name] = exec;
+                }
+
+                if (name === null && i+1 === waitingModules.length) {
+                    waitingModules = [];
+                    scriptCounter = 1;
+                }
+            }
+        });
+    }
+
+    /**
+     * On Load event
+     * @param  {Event}      event  event of the load
+     */
+    function onLoad(event) {
+        var target = (event.currentTarget || event.srcElement),
+            name,
+            count;
+
+        //Check if the script is realy loaded and executed ! (Fuck you IE with your "Loaded but not realy, wait to be completed")
+        if (event.type !== "load" && target.readyState != "complete") {
+            return;
+        }
+
+        name = target.getAttribute('data-module');
+        count = target.getAttribute('data-count');
+        target.setAttribute('data-loaded', true);
+
+        // Old browser need to use the detachEvent method
+        if (target.attachEvent) {
+            target.detachEvent('onreadystatechange', onLoad);
+        } else {
+            target.removeEventListener('load', onLoad);
+        }
+
+        // Is this script add a waiting module ? If not, that's a "normal" script file
+        if (count > waitingModules.length) {
+            modules[name] = scriptCounter--;
+        } else if (waitingModules[0][0] === null) {
+            waitingModules[0][0] = name;
+        }
+
+        checkModuleLoaded();
+    }
+
+    /**
+     * Attach events to a script tags
+     * @param {Element} script     script to attach event
+     */
+    function attachEvents(script) {
+        if (script.attachEvent) {
+            script.attachEvent('onreadystatechange', onLoad);
+        } else {
+            script.addEventListener('load', onLoad, false);
+        }
+    }
+
+    /**
+     * Check if a script already load
+     * @param  {String} moduleName module to load
+     */
+    function checkScripts(moduleName) {
+        var script = false;
+
+        each(document.getElementsByTagName('script'), function (elem, i) {
+            if (elem.getAttribute('data-module') && elem.getAttribute('data-module') === moduleName) {
+                script = elem;
+                return false;
+            }
+        });
+
+        return script;
+    }
+
+    /**
+     * Create a script element to load asked module
+     * @param  {String} file       name of the file
+     * @param  {String} moduleName name of the module
+     */
+    function create(file, moduleName) {
+        //SetTimeout prevent the "OMG RUN, CREATE THE SCRIPT ELEMENT, YOU FOOL" browser rush
+        setTimeout(function(){
+            var script = checkScripts(moduleName);
+            if (script) {
+                return;
+            }
+
+            scriptCounter++;
+
+            script = document.createElement('script');
+
+            script.async = true;
+            script.type = "text/javascript";
+            script.src = file;
+            script.setAttribute('data-module', moduleName);
+            script.setAttribute('data-count',  scriptCounter);
+            script.setAttribute('data-loaded', false);
+
+            if (baseElement) {
+                //prevent IE 6-8 bug (script executed before appenchild execution. Yeah, that's realy SUCK)
+                baseElement.parentNode.insertBefore(script, baseElement);
+            } else {
+                head.appendChild(script);
+            }
+
+            attachEvents(script);
+        }, 0);
+    }
+
+    /**
+     * Parse a file to include
+     * @param  {String} file  file to parse
+     */
+    function parseFiles(file) {
+        var moduleName = file;
+
+        //Don't load module already loaded
+        if (modules[moduleName]) {
+            checkModuleLoaded();
+            return;
+        }
+
+        if (!/\.js/.test(file)) {
+            file = file.replace('.', '/');
+            file = file + '.js';
+        }
+
+        create(file, moduleName);
+    }
+
+    /**
+     * @param {String}   name     the name of the module
+     * @param {Array}    deps     dependencies of the module
+     * @param {Function} module   module definition
+     */
+    include = function (name, deps, module) {
+        if (typeof name !== "string") {
+            module = deps;
+            deps = name;
+            name = null;
+        }
+
+        if (typeof deps !== "object") {
+            module = deps;
+            deps = [];
+        }
+
+        waitingModules.unshift([name, deps, module]);
+
+        checkModuleLoaded();
+
+        if (deps.length) {
+            each(deps, parseFiles);
+        }
+    };
 
 })(this);
