@@ -158,4 +158,14 @@ describe("Include", function(){
             expect(test).toBe(true);
         })
     });
+
+    it("should replace Require and Define", function(){
+        var test = false;
+
+        if (require && define) {
+            test = true;
+        }
+
+        expect(test).toBe(true);
+    });
 });

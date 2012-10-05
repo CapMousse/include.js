@@ -4,7 +4,6 @@
 // Licence:        Licence under MIT license (see license.md)
 // ==================================================================
 
-var include;
 (function (environment) {
 
     /**
@@ -209,7 +208,7 @@ var include;
      * @param {Array}    deps     dependencies of the module
      * @param {Function} module   module definition
      */
-    include = function (name, deps, module) {
+    environment.include = environment.require = environment.define = function (name, deps, module) {
         if (typeof name !== "string") {
             module = deps;
             deps = name;

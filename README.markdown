@@ -47,6 +47,10 @@ include('App.Nasa', ['App/Rover.js', 'App.Planet'], function(Rover, Planet){
 });
 ```
 
+## Already using a script loader ?
+
+If you already use a script loader you can replace it with **Include.js** without problemes and without rewriting code. `define()` and `require()` are supported by **Include.js**. Let's be light !
+
 ## Tests
 
 Unit test are made with [Jasmine](http://pivotal.github.com/jasmine/) and can be run by launching `Tests/SpecRunner.html` on any browser.
