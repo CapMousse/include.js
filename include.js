@@ -1,8 +1,8 @@
-// ==================================================================
+// =============================================================================
 // Project:        Include.js - Javascript loader
-// Copyright:      ©2011-2012 Jérémy Barbe and contributors
-// Licence:        Licence under MIT license (see license.md)
-// ==================================================================
+// Copyright:      ©2011-2012 Jérémy Barbe (http://shwaark.com) and contributors
+// Licence:        Licence under MIT license
+// =============================================================================
 
 (function (environment) {
 
@@ -45,7 +45,7 @@
         var i;
 
         for (i = 0; i < array.length; i++) {
-            if (array[i] && callback(array[i], i, array)) {
+            if (array[i] !== undefined && callback(array[i], i, array) === false) {
                 break;
             }
         }
@@ -208,7 +208,7 @@
      * @param {Array}    deps     dependencies of the module
      * @param {Function} module   module definition
      */
-    environment.include = environment.require = environment.define = function (name, deps, module) {
+    environment['include'] = environment['require'] = environment['define'] = function (name, deps, module) {
         if (typeof name !== "string") {
             module = deps;
             deps = name;
