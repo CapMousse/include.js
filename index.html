@@ -28,7 +28,8 @@
         </ul>
       </header>
       <section>
-        <h2>What's Include.js ?</h2>
+        <h2>
+<a name="whats-includejs-" class="anchor" href="#whats-includejs-"><span class="octicon octicon-link"></span></a>What's Include.js ?</h2>
 
 <p><strong>Include.js</strong> is a tiny (800b minified and gziped) Javascript loader. It can load normal javascript files but is more efficient with <strong>web modules</strong>.</p>
 
@@ -41,24 +42,21 @@
 <li>Opera √</li>
 <li>Safari √</li>
 <li>IE √ (IE 7+)</li>
-</ul><h2>How to use</h2>
-
-<h3>Create a module</h3>
+</ul><h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
 
 <p>To create a module, create a new javascript file and use <code>include()</code> as a wrapper :</p>
 
-<div class="highlight"><pre><span class="nx">include</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+<div class="highlight highlight-javascript"><pre><span class="nx">include</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
   <span class="k">return</span> <span class="p">{</span>
     <span class="nx">name</span> <span class="o">:</span> <span class="s2">"Mars Curiosity"</span>
   <span class="p">}</span>
 <span class="p">})</span>
 </pre></div>
 
-<h3>Naming a module</h3>
-
 <p>You can name your module with the first argument of <code>include()</code>.  Name are like <code>PHP</code> namespace : <code>Dir/FileName.js</code> -&gt; <code>Dir.FileName</code></p>
 
-<div class="highlight"><pre><span class="nx">include</span><span class="p">(</span><span class="s1">'App.Planet'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<div class="highlight highlight-javascript"><pre><span class="nx">include</span><span class="p">(</span><span class="s1">'App.Planet'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
   <span class="k">return</span> <span class="p">{</span>
     <span class="nx">name</span>      <span class="o">:</span> <span class="s2">"Mars"</span><span class="p">,</span>
     <span class="nx">gravity</span>   <span class="o">:</span> <span class="mf">0.376</span><span class="p">,</span>
@@ -67,11 +65,9 @@
 <span class="p">})</span>
 </pre></div>
 
-<h3>Load dependencies</h3>
+<p>Modules can use dependencies to work, as an array on second place on <code>include()</code> :</p>
 
-<p>Modules can use dependencies to work, as an array on second argument of <code>include()</code> :</p>
-
-<div class="highlight"><pre><span class="nx">include</span><span class="p">(</span><span class="s1">'App.Nasa'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'App/Rover.js'</span><span class="p">,</span> <span class="s1">'App.Planet'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Rover</span><span class="p">,</span> <span class="nx">Planet</span><span class="p">){</span>
+<div class="highlight highlight-javascript"><pre><span class="nx">include</span><span class="p">(</span><span class="s1">'App.Nasa'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'App/Rover.js'</span><span class="p">,</span> <span class="s1">'App.Planet'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Rover</span><span class="p">,</span> <span class="nx">Planet</span><span class="p">){</span>
   <span class="k">return</span> <span class="p">{</span>
     <span class="nx">rover</span>   <span class="o">:</span> <span class="nx">Rover</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
     <span class="nx">planet</span>  <span class="o">:</span> <span class="nx">Planet</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
@@ -80,17 +76,31 @@
 <span class="p">});</span>
 </pre></div>
 
-<h2>Already using a script loader ?</h2>
+<p>Modules can also be loaded from other url, and named :</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">include</span><span class="p">(</span><span class="s1">'App.Nasa'</span><span class="p">,</span> <span class="p">[[</span><span class="s1">'Rover'</span><span class="p">,</span> <span class="s1">'http://your/url/here/script/rover/'</span><span class="p">],</span> <span class="s1">'App.Planet'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Rover</span><span class="p">,</span> <span class="nx">Planet</span><span class="p">){</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">rover</span>   <span class="o">:</span> <span class="nx">Rover</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+    <span class="nx">planet</span>  <span class="o">:</span> <span class="nx">Planet</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+    <span class="nx">success</span> <span class="o">:</span> <span class="kc">true</span> 
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="already-using-a-script-loader-" class="anchor" href="#already-using-a-script-loader-"><span class="octicon octicon-link"></span></a>Already using a script loader ?</h2>
 
 <p>If you already use a script loader you can replace it with <strong>Include.js</strong> without problemes and without rewriting code. <code>define()</code> and <code>require()</code> are supported by <strong>Include.js</strong>. Let's be light !</p>
 
-<h2>Tests</h2>
+<h2>
+<a name="tests" class="anchor" href="#tests"><span class="octicon octicon-link"></span></a>Tests</h2>
 
 <p>Unit test are made with <a href="http://pivotal.github.com/jasmine/">Jasmine</a> and can be run by launching <code>Tests/SpecRunner.html</code> on any browser.</p>
 
-<h2>Licence</h2>
+<h2>
+<a name="about" class="anchor" href="#about"><span class="octicon octicon-link"></span></a>About</h2>
 
-<p><strong>Include.js</strong> is distributed under the MIT license.</p>
+<p>Created by <a>Jérémy Barbe</a><br><strong>Include.js</strong> is distributed under the MIT license.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/CapMousse">CapMousse</a></p>
