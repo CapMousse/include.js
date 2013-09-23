@@ -47,6 +47,19 @@ include('App.Nasa', ['App/Rover.js', 'App.Planet'], function(Rover, Planet){
 });
 ```
 
+Modules can also be loaded from other url, and named :
+
+```javascript
+include('App.Nasa', [['Rover', 'http://your/url/here/script/rover/'], 'App.Planet'], function(Rover, Planet){
+  return {
+    rover   : Rover.name,
+    planet  : Planet.name,
+    success : true 
+  }
+});
+```
+
+
 ## Already using a script loader ?
 
 If you already use a script loader you can replace it with **Include.js** without problemes and without rewriting code. `define()` and `require()` are supported by **Include.js**. Let's be light !

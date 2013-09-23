@@ -40,23 +40,23 @@ describe("Include", function(){
     });
 
 
-    it("should be able to load javascript module with normal URL", function(){
+    it("should be able to load normal as module", function(){
         runs(function(){
-            test = false;
-            
+            test = false; 
 
-            include(['data/b.js'], function(b){
-                test = b;
+            include([['module', 'data/b.js']], function(module){
+                test = module;
             });
         });
 
         waitsFor(function() {
             return test;
-        }, "Include can't javascript module with normal URL", 500);
+        }, "Include can't load normal javascript", 500);
 
         runs(function() {
             expect(test).toBe('b');
         })
+
     });
 
 

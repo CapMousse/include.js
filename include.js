@@ -1,6 +1,6 @@
 // =============================================================================
 // Project:        Include.js - Javascript loader
-// Copyright:      ©2011-2012 Jérémy Barbe (http://shwaark.com) and contributors
+// Copyright:      ©2011-2013 Jérémy Barbe (http://shwaark.com) and contributors
 // Licence:        Licence under MIT license
 // =============================================================================
 
@@ -61,9 +61,11 @@
                 exec         = module[2],
                 args         = [];
 
-            each(dependencies, function (dependencie) {
-                if (modules[dependencie] !== undefined) {
-                    args.push(modules[dependencie]);
+            each(dependencies, function (dependencie, name) {
+                name = dependencie.push ? dependencie[0] : dependencie
+
+                if (modules[name] !== undefined) {
+                    args.push(modules[name]);
                 }
             });
 
@@ -137,7 +139,7 @@
     function checkScripts(moduleName) {
         var script = false;
 
-        each(document.getElementsByTagName('script'), function (elem, i) {
+        each(document.getElementsByTagName('script'), function (elem) {
             if (elem.getAttribute('data-module') && elem.getAttribute('data-module') === moduleName) {
                 script = elem;
                 return false;
@@ -149,10 +151,10 @@
 
     /**
      * Create a script element to load asked module
-     * @param  {String} file       name of the file
      * @param  {String} moduleName name of the module
+     * @param  {String} moduleFile fiel to include
      */
-    function create(file, moduleName) {
+    function create(moduleName, moduleFile) {
         //SetTimeout prevent the "OMG RUN, CREATE THE SCRIPT ELEMENT, YOU FOOL" browser rush
         setTimeout(function(){
             var script = checkScripts(moduleName);
@@ -166,7 +168,7 @@
 
             script.async = true;
             script.type = "text/javascript";
-            script.src = file;
+            script.src = moduleFile;
             script.setAttribute('data-module', moduleName);
             script.setAttribute('data-count',  scriptCounter);
             script.setAttribute('data-loaded', false);
@@ -187,20 +189,22 @@
      * @param  {String} file  file to parse
      */
     function parseFiles(file) {
-        var moduleName = file;
+        var moduleName = file.push ? file[0] : file;
+        var moduleFile = file.push ? file[1] : file;
 
         //Don't load module already loaded
         if (modules[moduleName]) {
             checkModuleLoaded();
             return;
         }
+        
 
-        if (!/\.js/.test(file)) {
-            file = file.replace('.', '/');
-            file = file + '.js';
+        if (!/\.js/.test(moduleFile) && !/^http/.test(moduleFile)) {
+            moduleFile = moduleFile.replace('.', '/');
+            moduleFile = moduleFile + '.js';
         }
 
-        create(file, moduleName);
+        create(moduleName, moduleFile);
     }
 
     /**
