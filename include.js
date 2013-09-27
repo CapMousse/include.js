@@ -111,9 +111,9 @@
         }
 
         // Is this script add a waiting module ? If not, that's a "normal" script file
-        if (count > waitingModules.length && !name) {
+        if (count > waitingModules.length) {
             modules[name] = scriptCounter--;
-        } else if (waitingModules.length && waitingModules[0][0] === null) {
+        } else if (waitingModules[0][0] === null) {
             waitingModules[0][0] = name;
         }
 
