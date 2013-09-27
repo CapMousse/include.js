@@ -40,12 +40,12 @@ describe("Include", function(){
     });
 
 
-    it("should be able to load normal as module", function(){
+    it("should be able to load normal scripts as module", function(){
         runs(function(){
             test = false; 
 
-            include([['module', 'data/b.js']], function(module){
-                test = module;
+            include([['stripe', 'https://js.stripe.com/v2/']], function(stripe){
+                test = stripe;
             });
         });
 
@@ -54,7 +54,7 @@ describe("Include", function(){
         }, "Include can't load normal javascript", 500);
 
         runs(function() {
-            expect(test).toBe('b');
+            expect(test).toEqual(jasmine.any(Function));
         })
 
     });
@@ -167,5 +167,25 @@ describe("Include", function(){
         }
 
         expect(test).toBe(true);
+    });
+
+
+    it("should be able to reload normal scripts as module", function(){
+        runs(function(){
+            test = false; 
+
+            include([['stripe', 'https://js.stripe.com/v2/']], function(stripe){
+                test = stripe;
+            });
+        });
+
+        waitsFor(function() {
+            return test;
+        }, "Include can't load normal javascript", 500);
+
+        runs(function() {
+            expect(test).toEqual(jasmine.any(Function));
+        })
+
     });
 });

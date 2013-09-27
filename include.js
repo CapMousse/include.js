@@ -65,6 +65,7 @@
                 n = dependencie.push ? dependencie[0] : dependencie
 
                 if (modules[n] !== undefined) {
+                    console.log(n, modules[n]);
                     args.push(modules[n]);
                 }
             });
@@ -112,7 +113,8 @@
 
         // Is this script add a waiting module ? If not, that's a "normal" script file
         if (count > waitingModules.length) {
-            modules[name] = scriptCounter--;
+            scriptCounter--;
+            modules[name] = modules[name] || scriptCounter;
         } else if (waitingModules[0][0] === null) {
             waitingModules[0][0] = name;
         }
