@@ -61,11 +61,11 @@
                 exec         = module[2],
                 args         = [];
 
-            each(dependencies, function (dependencie, name) {
-                name = dependencie.push ? dependencie[0] : dependencie
+            each(dependencies, function (dependencie, n) {
+                n = dependencie.push ? dependencie[0] : dependencie
 
-                if (modules[name] !== undefined) {
-                    args.push(modules[name]);
+                if (modules[n] !== undefined) {
+                    args.push(modules[n]);
                 }
             });
 
@@ -111,9 +111,9 @@
         }
 
         // Is this script add a waiting module ? If not, that's a "normal" script file
-        if (count > waitingModules.length) {
+        if (count > waitingModules.length && !name) {
             modules[name] = scriptCounter--;
-        } else if (waitingModules[0][0] === null) {
+        } else if (waitingModules.length && waitingModules[0][0] === null) {
             waitingModules[0][0] = name;
         }
 
