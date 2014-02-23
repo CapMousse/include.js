@@ -65,13 +65,12 @@
                 n = dependencie.push ? dependencie[0] : dependencie
 
                 if (modules[n] !== undefined) {
-                    console.log(n, modules[n]);
                     args.push(modules[n]);
                 }
             });
 
             if (dependencies.length === args.length || dependencies.length === 0) {
-                exec = exec.apply(this, args);
+                exec = typeof exec == 'function' ? exec.apply(this, args) : exec;
                 module.push(true);
 
                 if (name !== null) {
@@ -221,7 +220,7 @@
             name = null;
         }
 
-        if (typeof deps !== "object") {
+        if (deps.constructor !== [].constructor) {
             module = deps;
             deps = [];
         }
