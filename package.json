@@ -1,0 +1,32 @@
+{
+  "name": "include.js",
+  "version": "3.0.0",
+  "description": "**Include.js** is a tiny Javascript loader. It can load normal javascript files but is more efficient with **web modules**.",
+  "main": "include-min.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine-core": "^2.5.0",
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-opera-launcher": "^1.0.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-safari-launcher": "^1.0.0"
+  },
+  "scripts": {
+    "test": "karma start test/karma.conf.js --single-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CapMousse/include.js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CapMousse/include.js/issues"
+  },
+  "homepage": "https://github.com/CapMousse/include.js#readme"
+}
