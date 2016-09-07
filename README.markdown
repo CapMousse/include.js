@@ -7,6 +7,7 @@ When it's possible, it will use async loading to speed up you page and will ensu
 Include.js was tested on :
 
 - Chrome √
+- Firefox √
 - Opera √
 - Safari √
 - IE (> 6) √
