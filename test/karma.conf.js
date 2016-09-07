@@ -5,9 +5,9 @@ module.exports = function(config) {
     var configuration = {
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: '',
+        basePath: '.',
 
-        plugins: ['karma-chrome-launcher', 'karma-jasmine'],
+        plugins: ['karma-chrome-launcher', 'karma-firefox-launcher', 'karma-jasmine'],
 
 
         // frameworks to use
@@ -16,7 +16,17 @@ module.exports = function(config) {
 
 
         // list of files / patterns to load in the browser
-        files: ['*.js'],
+        files: [
+            { pattern : '../include.js', served: true, included : true },
+            { pattern : 'data/*.js', served: true, included : false },
+            { pattern : 'https://js.stripe.com/v2/stripe.js', served: true, included : false },
+            { pattern : 'https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.css', served: true, included : false },
+            'include-specs.js'
+        ],
+
+        proxies: {
+            '/data/': '/base/data/'
+        },
 
 
         // list of files to exclude
@@ -54,7 +64,7 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['Chrome', 'Firefox'],
 
         customLaunchers: {
             Chrome_travis_ci: {

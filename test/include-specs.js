@@ -78,7 +78,7 @@ describe("Include external script", function(){
 
 describe("Include css", function(){
     it("should be able to load css", function(done){
-        include(['https://fonts.googleapis.com/css?family=Arimo:700'], function(css){
+        include(['https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.css'], function(css){
             expect(css).toBe(null);
             done();
         });
@@ -86,7 +86,7 @@ describe("Include css", function(){
 
     it("should be able to load css and module", function(done){
         inc = include([
-            'https://fonts.googleapis.com/css?family=Arimo:700', 
+            'https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.css', 
             'data/b.js'
         ], function(css, b){
             expect(css).toBe(null);
@@ -97,7 +97,7 @@ describe("Include css", function(){
 
     it("should be able to load css and script as module", function(done){
         inc = include([
-            'https://fonts.googleapis.com/css?family=Arimo:700', 
+            'https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.css', 
             ['stripe', 'https://js.stripe.com/v2/stripe.js']
         ], function(css, stripe){
             expect(css).toBe(null);
