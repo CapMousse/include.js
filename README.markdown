@@ -78,10 +78,6 @@ If you already use a script loader you can replace it with **Include.js** withou
   - [jeremy.sh](http://jeremy.sh)
   - [@capitainemousse](https://twitter.com/capitainemousse)
 
-
-Created by [Jérémy Barbe](http://jeremy.sh)  
-**Include.js** is distributed under the MIT license.
-
 ## License
 
 See LICENSE file
