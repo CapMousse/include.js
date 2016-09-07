@@ -318,7 +318,6 @@
      * @param {Function} module   module definition
      */
     environment['include'] = environment['require'] = environment['define'] = function (name, deps, module) {
-        console.log(waitingModules);
         return new Include(name, deps, module);
     };
 
