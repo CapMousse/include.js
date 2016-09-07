@@ -1,9 +1,3 @@
-// =============================================================================
-// Project:        Include.js - Javascript loader
-// Copyright:      ©2011-2013 Jérémy Barbe (http://jeremy.sh) and contributors
-// Licence:        Licence under MIT license
-// =============================================================================
-
 (function (environment) {
 
     /**
@@ -36,7 +30,11 @@
      */
     var head = document.getElementsByTagName('head')[0];
 
-
+    /**
+     * @param {String}   name     the name of the module
+     * @param {Array}    deps     dependencies of the module
+     * @param {Function} module   module definition
+     */
     function Include (name, deps, module) {
         var self = this;
 
@@ -301,15 +299,6 @@
         ext = moduleFile.split('.').pop() == 'js';
 
         this.create.call(this, moduleName, moduleFile, ext);
-    }
-
-    /**
-     * Reset include
-     */
-    Include.prototype.reset = function () {
-        modules = {};
-        waitingModules = [];
-        scriptCounter = 1;
     }
 
     /**
