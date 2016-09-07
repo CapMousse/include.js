@@ -1,5 +1,5 @@
 language: node_js
-script: karma start tests/karma.conf.js --single-run
+script: karma start test/karma.conf.js --single-run
 node_js:
 - "0.10"
  
