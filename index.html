@@ -1,37 +1,29 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Include.js by CapMousse</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Include.js</h1>
-        <p>A tiny (800b) Javascript Module Loader</p>
+    <section class="page-header">
+      <h1 class="project-name">Include.js</h1>
+      <h2 class="project-tagline">A tiny (1.2kb) Javascript Module/css Loader</h2>
+      <a href="https://github.com/CapMousse/include.js" class="btn">View on GitHub</a>
+      <a href="https://github.com/CapMousse/include.js/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/CapMousse/include.js/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <p class="view"><a href="https://github.com/CapMousse/include.js">View the Project on GitHub <small>CapMousse/include.js</small></a></p>
+    <section class="main-content">
+      <h1>
+<a id="includejs-" class="anchor" href="#includejs-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Include.js <a href="https://travis-ci.org/CapMousse/include.js"><img src="https://travis-ci.org/CapMousse/include.js.svg?branch=master" alt="Build Status"></a>
+</h1>
 
-
-        <ul>
-          <li><a href="https://github.com/CapMousse/include.js/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/CapMousse/include.js/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/CapMousse/include.js">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h2>
-<a name="whats-includejs-" class="anchor" href="#whats-includejs-"><span class="octicon octicon-link"></span></a>What's Include.js ?</h2>
-
-<p><strong>Include.js</strong> is a tiny (800b minified and gziped) Javascript loader. It can load normal javascript files but is more efficient with <strong>web modules</strong>.</p>
+<p><strong>Include.js</strong> is a tiny (1,2ko minified and gziped) Javascript loader. It can load normal javascript files or css but is more efficient with <strong>web modules</strong>.</p>
 
 <p>When it's possible, it will use async loading to speed up you page and will ensure the good executions of your script. It support <strong>nested dependencies</strong>, a useful feature to create clean and flexible javascript application.</p>
 
@@ -41,74 +33,88 @@
 <li>Chrome √</li>
 <li>Opera √</li>
 <li>Safari √</li>
-<li>IE √ (IE 7+)</li>
-</ul><h2>
-<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
+<li>IE (&gt; 6) √</li>
+</ul>
+
+<h2>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use</h2>
 
 <p>To create a module, create a new javascript file and use <code>include()</code> as a wrapper :</p>
 
-<div class="highlight highlight-javascript"><pre><span class="nx">include</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">name</span> <span class="o">:</span> <span class="s2">"Mars Curiosity"</span>
-  <span class="p">}</span>
-<span class="p">})</span>
-</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-k">function</span>(){
+  <span class="pl-k">return</span> {
+    name <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Mars Curiosity<span class="pl-pds">"</span></span>
+  }
+})</pre></div>
 
 <p>You can name your module with the first argument of <code>include()</code>.  Name are like <code>PHP</code> namespace : <code>Dir/FileName.js</code> -&gt; <code>Dir.FileName</code></p>
 
-<div class="highlight highlight-javascript"><pre><span class="nx">include</span><span class="p">(</span><span class="s1">'App.Planet'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">name</span>      <span class="o">:</span> <span class="s2">"Mars"</span><span class="p">,</span>
-    <span class="nx">gravity</span>   <span class="o">:</span> <span class="mf">0.376</span><span class="p">,</span>
-    <span class="nx">saletties</span> <span class="o">:</span> <span class="mi">2</span>
-  <span class="p">}</span>
-<span class="p">})</span>
-</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-s"><span class="pl-pds">'</span>App.Planet<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){
+  <span class="pl-k">return</span> {
+    name      <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Mars<span class="pl-pds">"</span></span>,
+    gravity   <span class="pl-k">:</span> <span class="pl-c1">0.376</span>,
+    saletties <span class="pl-k">:</span> <span class="pl-c1">2</span>
+  }
+})</pre></div>
 
-<p>Modules can use dependencies to work, as an array on second place on <code>include()</code> :</p>
+<p>Modules can have dependencies to work, as an array on second argument off <code>include()</code> :</p>
 
-<div class="highlight highlight-javascript"><pre><span class="nx">include</span><span class="p">(</span><span class="s1">'App.Nasa'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'App/Rover.js'</span><span class="p">,</span> <span class="s1">'App.Planet'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Rover</span><span class="p">,</span> <span class="nx">Planet</span><span class="p">){</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">rover</span>   <span class="o">:</span> <span class="nx">Rover</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
-    <span class="nx">planet</span>  <span class="o">:</span> <span class="nx">Planet</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
-    <span class="nx">success</span> <span class="o">:</span> <span class="kc">true</span> 
-  <span class="p">}</span>
-<span class="p">});</span>
-</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-s"><span class="pl-pds">'</span>App.Nasa<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>App/Rover.js<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>App.Planet<span class="pl-pds">'</span></span>], <span class="pl-k">function</span>(<span class="pl-smi">Rover</span>, <span class="pl-smi">Planet</span>){
+  <span class="pl-k">return</span> {
+    rover   <span class="pl-k">:</span> <span class="pl-smi">Rover</span>.<span class="pl-c1">name</span>,
+    planet  <span class="pl-k">:</span> <span class="pl-smi">Planet</span>.<span class="pl-c1">name</span>,
+    success <span class="pl-k">:</span> <span class="pl-c1">true</span> 
+  }
+});</pre></div>
 
 <p>Modules can also be loaded from other url, and named :</p>
 
-<div class="highlight highlight-javascript"><pre><span class="nx">include</span><span class="p">(</span><span class="s1">'App.Nasa'</span><span class="p">,</span> <span class="p">[[</span><span class="s1">'Rover'</span><span class="p">,</span> <span class="s1">'http://your/url/here/script/rover/'</span><span class="p">],</span> <span class="s1">'App.Planet'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Rover</span><span class="p">,</span> <span class="nx">Planet</span><span class="p">){</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">rover</span>   <span class="o">:</span> <span class="nx">Rover</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
-    <span class="nx">planet</span>  <span class="o">:</span> <span class="nx">Planet</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
-    <span class="nx">success</span> <span class="o">:</span> <span class="kc">true</span> 
-  <span class="p">}</span>
-<span class="p">});</span>
-</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-s"><span class="pl-pds">'</span>App.Nasa<span class="pl-pds">'</span></span>, [[<span class="pl-s"><span class="pl-pds">'</span>Rover<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>http://your/url/here/script/rover/<span class="pl-pds">'</span></span>], <span class="pl-s"><span class="pl-pds">'</span>App.Planet<span class="pl-pds">'</span></span>], <span class="pl-k">function</span>(<span class="pl-smi">Rover</span>, <span class="pl-smi">Planet</span>){
+  <span class="pl-k">return</span> {
+    rover   <span class="pl-k">:</span> <span class="pl-smi">Rover</span>.<span class="pl-c1">name</span>,
+    planet  <span class="pl-k">:</span> <span class="pl-smi">Planet</span>.<span class="pl-c1">name</span>,
+    success <span class="pl-k">:</span> <span class="pl-c1">true</span> 
+  }
+});</pre></div>
+
+<p>And you can load CSS </p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-s"><span class="pl-pds">'</span>path/to/css.css<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){
+  <span class="pl-c">//do something when style is apply</span>
+})</pre></div>
 
 <h2>
-<a name="already-using-a-script-loader-" class="anchor" href="#already-using-a-script-loader-"><span class="octicon octicon-link"></span></a>Already using a script loader ?</h2>
+<a id="already-using-a-script-loader-" class="anchor" href="#already-using-a-script-loader-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Already using a script loader ?</h2>
 
 <p>If you already use a script loader you can replace it with <strong>Include.js</strong> without problemes and without rewriting code. <code>define()</code> and <code>require()</code> are supported by <strong>Include.js</strong>. Let's be light !</p>
 
 <h2>
-<a name="tests" class="anchor" href="#tests"><span class="octicon octicon-link"></span></a>Tests</h2>
+<a id="developed-by" class="anchor" href="#developed-by" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Developed by</h2>
 
-<p>Unit test are made with <a href="http://pivotal.github.com/jasmine/">Jasmine</a> and can be run by launching <code>Tests/SpecRunner.html</code> on any browser.</p>
+<ul>
+<li>Jérémy Barbe
+
+<ul>
+<li><a href="http://jeremy.sh">jeremy.sh</a></li>
+<li><a href="https://twitter.com/capitainemousse">@capitainemousse</a></li>
+</ul>
+</li>
+</ul>
 
 <h2>
-<a name="about" class="anchor" href="#about"><span class="octicon octicon-link"></span></a>About</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
-<p>Created by <a>Jérémy Barbe</a><br><strong>Include.js</strong> is distributed under the MIT license.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/CapMousse">CapMousse</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+<p>See LICENSE file</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/CapMousse/include.js">Include.js</a> is maintained by <a href="https://github.com/CapMousse">CapMousse</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
+
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
