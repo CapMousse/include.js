@@ -1,7 +1,7 @@
 {
   "name": "include.js",
-  "version": "2.0.1",
-  "description": "**Include.js** is a tiny (800b minified and gziped) Javascript loader. It can load normal javascript files but is more efficient with **web modules**.",
+  "version": "3.0.0",
+  "description": "**Include.js** is a tiny Javascript loader. It can load normal javascript files but is more efficient with **web modules**.",
   "main": "include-min.js",
   "dependencies": {},
   "devDependencies": {

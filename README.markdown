@@ -1,4 +1,4 @@
-# Include.js
+# Include.js [![Build Status](https://travis-ci.org/CapMousse/include.js.svg?branch=master)](https://travis-ci.org/CapMousse/include.js)
 
 **Include.js** is a tiny (1,2ko minified and gziped) Javascript loader. It can load normal javascript files or css but is more efficient with **web modules**.
 
@@ -9,7 +9,7 @@ Include.js was tested on :
 - Chrome √
 - Opera √
 - Safari √
-- IE √ (IE 7+)
+- IE (> 6) √
 
 ## How to use
 
@@ -71,12 +71,17 @@ include('path/to/css.css', function(){
 
 If you already use a script loader you can replace it with **Include.js** without problemes and without rewriting code. `define()` and `require()` are supported by **Include.js**. Let's be light !
 
-## Tests
 
-Unit test are made with [Jasmine](http://pivotal.github.com/jasmine/) and can be run by launching `Tests/SpecRunner.html` on any browser.
+## Developed by
 
+- Jérémy Barbe
+  - [jeremy.sh](http://jeremy.sh)
+  - [@capitainemousse](https://twitter.com/capitainemousse)
 
-## About
 
 Created by [Jérémy Barbe](http://jeremy.sh)  
 **Include.js** is distributed under the MIT license.
+
+## License
+
+See LICENSE file
