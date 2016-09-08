@@ -2,129 +2,199 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Include.js by CapMousse</title>
+    <title>Include.js</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name">Include.js</h1>
-      <h2 class="project-tagline">A tiny (1.2kb) Javascript Module/css Loader</h2>
-      <a href="https://github.com/CapMousse/include.js" class="btn">View on GitHub</a>
-      <a href="https://github.com/CapMousse/include.js/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/CapMousse/include.js/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
-
     <section class="main-content">
-      <h1>
-<a id="includejs-" class="anchor" href="#includejs-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Include.js <a href="https://travis-ci.org/CapMousse/include.js"><img src="https://travis-ci.org/CapMousse/include.js.svg?branch=master" alt="Build Status"></a>
-</h1>
+      <table>
+        <thead>
+          <tr>
+            <th class="docs">
+              <h1>
+                <a id="includejs-" class="anchor" href="#includejs-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Include.js <a href="https://travis-ci.org/CapMousse/include.js"><img src="https://travis-ci.org/CapMousse/include.js.svg?branch=master" alt="Build Status"></a>
+              </h1>
+            </th>
+            <th class="code"></th>
+          </tr>
+        </thead>
 
-<p><strong>Include.js</strong> is a tiny (1,2ko minified and gziped) Javascript loader. It can load normal javascript files or css but is more efficient with <strong>web modules</strong>.</p>
+        <tbody>
+          <tr>
+            <td class="docs">
+              <p><strong>Include.js</strong> is a tiny (1,2ko minified and gziped) Javascript loader. It can load normal javascript files or css but is more efficient with <strong>web modules</strong>.</p>
 
-<p>When it's possible, it will use async loading to speed up you page and will ensure the good executions of your script. It support <strong>nested dependencies</strong>, a useful feature to create clean and flexible javascript application.</p>
+              <p>When it's possible, it will use async loading to speed up you page and will ensure the good executions of your script. It support <strong>nested dependencies</strong>, a useful feature to create clean and flexible javascript application.</p>
 
-<p>Include.js was tested on :</p>
+              <p>Include.js was tested on :</p>
 
-<ul>
-<li>Chrome √</li>
-<li>Firefox √</li>
-<li>Opera √</li>
-<li>Safari √</li>
-<li>IE (&gt; 6) √</li>
-</ul>
+              <ul>
+                <li>Chrome √</li>
+                <li>Firefox √</li>
+                <li>Opera √</li>
+                <li>Safari √</li>
+                <li>IE (&gt; 6) √</li>
+              </ul>
+            </td>
+            <td class="code">
+              <pre><code class="javascript">include([
+  'https://google-analytics.com/ga.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/javascript.min.js'
+], function () {
+  hljs.initHighlightingOnLoad();
+  
+  try {
+    var pageTracker = _gat._getTracker("UA-24455497-2");
+    pageTracker._trackPageview();
+  } catch(err) {}
+});</code></pre>
+            </td>
+          </tr>
 
-<h2>
-<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use</h2>
+          <tr>
+            <td class="docs">
+              <h2>Define modules</h2>
+              <p>In the old javascript days, to create a module, you would add a simple wrapper on your code, like a auto-called anonymous function</p>
+            </td>
+            <td class="code hasTitle">
+              <pre><code class="javascript">(function(env){
+  //your code here
+})(window);</code></pre>
+            </td>
+          </tr>
+          <tr>
+            <td class="docs">
+              <p>Now, to define a module meeting the <a href="http://requirejs.org/docs/whyamd.html#definition">AMD standard</a>, just use <code>include()</code> as the wrapper of your code.</p>
+              <p>With AMD definition, you can create module having dependencies realy easily, executing code only when the dependencies are available.</p>
+            </td>
+            <td class="code">
+              <pre><code class="javascript">//define a new module with include
+include(['dep1', 'dep2'], function (dep1, dep2) {
 
-<p>To create a module, create a new javascript file and use <code>include()</code> as a wrapper :</p>
+  //define the module value with return
+  return dep2({
+    name: dep1('Mars Curiosity')
+  });
+});</code></pre>
+            </td>
+          </tr>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-k">function</span>(){
-  <span class="pl-k">return</span> {
-    name <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Mars Curiosity<span class="pl-pds">"</span></span>
-  }
-})</pre></div>
+          <tr>
+            <td class="docs">
+              <h2>Named modules</h2>
+              <p>Modules without a name are automatically named with their file name. This is what makes modules very portable and easily usable in others projetcs.</p>
+              <p>Naming module manually must be avoided to prevent conflicts or loading missing module. Only use module naming in controlled cases or for better performances.</p>
+            </td>
+            <td class="code hasTitle">
+              <pre><code class="javascript">//define a named module with dependencies
+include('name', ['dep1', 'dep2'], function (dep1, dep2) {
+  return dep2({
+    name: dep1('Mars Curiosity')
+  });
+});</code></pre>
+            </td>
+          </tr>
 
-<p>You can name your module with the first argument of <code>include()</code>.  Name are like <code>PHP</code> namespace : <code>Dir/FileName.js</code> -&gt; <code>Dir.FileName</code></p>
+          <tr>
+            <td class="docs">
+              <h2>External dependencies</h2>
+              <p>You can also load external dependencies, useful to speed up website loading time and prevent parsing to be blocked.</p>
+              <p>External dependencies can be AMD module or normal javascripts. If no module is found, argument send to the callback will be the index of the script in the dependencies array instead of the module function.</p>
+            </td>
+            <td class="code hasTitle">
+              <pre><code class="javascript">include(['//website/jquery.js', '//website/amd-module.js'], function (indexOfJquery, amdModule) {
+  $('#block').text(amdModule());
+});</code></pre>
+            </td>
+          </tr>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-s"><span class="pl-pds">'</span>App.Planet<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){
-  <span class="pl-k">return</span> {
-    name      <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Mars<span class="pl-pds">"</span></span>,
-    gravity   <span class="pl-k">:</span> <span class="pl-c1">0.376</span>,
-    saletties <span class="pl-k">:</span> <span class="pl-c1">2</span>
-  }
-})</pre></div>
+          <tr>
+            <td class="docs">
+              <h2>Load CSS</h2>
+              <p>You can also load css like any other module. The callback will be called when the browser will have parsed the style.</p>
+            </td>
+            <td class="code hasTitle">
+              <pre><code class="javascript">include(['/styles/alternative.css', '//website/external-css.js'], function (css1, css2) {
+  //css1 and css2 will be null
+});</code></pre>
+            </td>
+          </tr>
 
-<p>Modules can have dependencies to work, as an array on second argument off <code>include()</code> :</p>
+          <tr>
+            <td class="docs">
+              <h2>
+              <a id="already-using-a-script-loader-" class="anchor" href="#already-using-a-script-loader-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Already using a script loader ?</h2>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-s"><span class="pl-pds">'</span>App.Nasa<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>App/Rover.js<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>App.Planet<span class="pl-pds">'</span></span>], <span class="pl-k">function</span>(<span class="pl-smi">Rover</span>, <span class="pl-smi">Planet</span>){
-  <span class="pl-k">return</span> {
-    rover   <span class="pl-k">:</span> <span class="pl-smi">Rover</span>.<span class="pl-c1">name</span>,
-    planet  <span class="pl-k">:</span> <span class="pl-smi">Planet</span>.<span class="pl-c1">name</span>,
-    success <span class="pl-k">:</span> <span class="pl-c1">true</span> 
-  }
-});</pre></div>
+              <p>If you already use a script loader you can replace it with <strong>Include.js</strong> without problemes and without rewriting code. <code>define()</code> and <code>require()</code> are supported by <strong>Include.js</strong>. Let's be light !</p>
+            </td>
+            <td class="code"></td>
+          </tr>
 
-<p>Modules can also be loaded from other url, and named :</p>
+          <tr>
+            <td class="docs">
+              <h2>
+              <a id="download" class="anchor" href="#download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Download</h2>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-s"><span class="pl-pds">'</span>App.Nasa<span class="pl-pds">'</span></span>, [[<span class="pl-s"><span class="pl-pds">'</span>Rover<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>http://your/url/here/script/rover/<span class="pl-pds">'</span></span>], <span class="pl-s"><span class="pl-pds">'</span>App.Planet<span class="pl-pds">'</span></span>], <span class="pl-k">function</span>(<span class="pl-smi">Rover</span>, <span class="pl-smi">Planet</span>){
-  <span class="pl-k">return</span> {
-    rover   <span class="pl-k">:</span> <span class="pl-smi">Rover</span>.<span class="pl-c1">name</span>,
-    planet  <span class="pl-k">:</span> <span class="pl-smi">Planet</span>.<span class="pl-c1">name</span>,
-    success <span class="pl-k">:</span> <span class="pl-c1">true</span> 
-  }
-});</pre></div>
+              <ul>
+                <li><a href="https://github.com/CapMousse/include.js"">View on GitHub</a></li>
+                <li><a href="https://github.com/CapMousse/include.js/zipball/master"">Download .zip</a></li>
+                <li><a href="https://github.com/CapMousse/include.js/tarball/master"">Download .tar.gz</a></li>
+              </ul>
+            </td>
+            <td class="code"></td>
+          </tr>
 
-<p>And you can load CSS </p>
+          <tr>
+            <td class="docs">
+              <h2>
+              <a id="developed-by" class="anchor" href="#developed-by" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Developed by</h2>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-en">include</span>(<span class="pl-s"><span class="pl-pds">'</span>path/to/css.css<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){
-  <span class="pl-c">//do something when style is apply</span>
-})</pre></div>
+              <ul>
+              <li>Jérémy Barbe
 
-<h2>
-<a id="already-using-a-script-loader-" class="anchor" href="#already-using-a-script-loader-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Already using a script loader ?</h2>
+              <ul>
+              <li><a href="http://jeremy.sh">jeremy.sh</a></li>
+              <li><a href="https://twitter.com/capitainemousse">@capitainemousse</a></li>
+              </ul>
+              </li>
+              </ul>
+            </td>
+            <td class="code"></td>
+          </tr>
 
-<p>If you already use a script loader you can replace it with <strong>Include.js</strong> without problemes and without rewriting code. <code>define()</code> and <code>require()</code> are supported by <strong>Include.js</strong>. Let's be light !</p>
+          <tr>
+            <td class="docs">
+              <h2><a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
-<h2>
-<a id="developed-by" class="anchor" href="#developed-by" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Developed by</h2>
-
-<ul>
-<li>Jérémy Barbe
-
-<ul>
-<li><a href="http://jeremy.sh">jeremy.sh</a></li>
-<li><a href="https://twitter.com/capitainemousse">@capitainemousse</a></li>
-</ul>
-</li>
-</ul>
-
-<h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
-
-<p>See LICENSE file</p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/CapMousse/include.js">Include.js</a> is maintained by <a href="https://github.com/CapMousse">CapMousse</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
+              Include.js is under the MIT License.
+            </td>
+            <td class="code"></td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
-            <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-24455497-2");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
+    <a href="https://github.com/CapMousse/include.js" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+    <script src="javascripts/include-min.js"></script>
+    <script>
+      include([
+        'https://google-analytics.com/ga.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/javascript.min.js',
+        'https://fonts.googleapis.com/css?family=Open+Sans:400,700',
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-dark.min.css'
+      ], function () {
+        try {
+          hljs.initHighlightingOnLoad();
+          var pageTracker = _gat._getTracker("UA-24455497-2");
+          pageTracker._trackPageview();
+        } catch (e) {}
+      });
+    </script>
 
   </body>
 </html>
