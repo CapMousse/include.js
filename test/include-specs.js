@@ -98,7 +98,7 @@ describe("Include css", function(){
         });
     });
 
-    it("should be able to load css and module", function(done){
+    it("should be able to load module and css", function(done){
         include([
             'https://cdnjs.cloudflare.com/ajax/libs/16pixels/0.1.6/16pixels.css', 
             'data/b.js'
@@ -109,7 +109,7 @@ describe("Include css", function(){
         });
     });
 
-    it("should be able to load css and script as module", function(done){
+    it("should be able to load external script ad module and css", function(done){
         include([
             'https://cdnjs.cloudflare.com/ajax/libs/1140/2.0/1140.css', 
             ['stripe', 'https://js.stripe.com/v2/stripe.js']

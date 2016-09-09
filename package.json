@@ -1,6 +1,6 @@
 {
   "name": "include.js",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "**Include.js** is a tiny Javascript loader. It can load normal javascript files but is more efficient with **web modules**.",
   "main": "include-min.js",
   "dependencies": {},

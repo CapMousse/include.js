@@ -147,12 +147,13 @@
      * onModuleLoaded
      * @param  {String}  name  name of the module
      * @param  {Number}  index index of the module
+     * @param  {Boolean} isCss
      */
-    Include.prototype.onModuleLoaded = function (name, index) {
+    Include.prototype.onModuleLoaded = function (name, index, isCss) {
         var self = this;
 
         // Is this script add a waiting module ? If not, that's a "normal" script file
-        if (index > waitingModules.length) {
+        if (index > waitingModules.length || isCss) {
             scriptCounter--;
             modules[name] = modules[name] || scriptCounter;
         } else if (waitingModules[0][0] === null) {
@@ -201,9 +202,7 @@
         while (i--) {
             if (sheets[i].href.indexOf(href) != -1) {
                 elem.setAttribute('data-loaded', true);
-                self.onModuleLoaded(elem.getAttribute('data-module'), elem.getAttribute('data-count'));
-
-                self.checkModuleLoaded();
+                self.onModuleLoaded(elem.getAttribute('data-module'), elem.getAttribute('data-count'), true);
                 return;
             }
         }
