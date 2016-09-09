@@ -1,7 +1,7 @@
 (function (environment) {
 
     /**
-     * List a existings modules
+     * List of existings modules
      * @type {Object}
      */
     var modules = {};
@@ -51,6 +51,12 @@
 
         waitingModules.unshift([name, deps, module]);
 
+        /**
+         * Uid for script differentiation
+         * @type {String}
+         */
+        self.uid = Math.random().toString(36).replace(/[^a-z0-9]+/g, '').substr(0, 10);
+
         self.checkModuleLoaded();
 
         if (deps.length) {
@@ -75,6 +81,31 @@
     }
 
     /**
+     * Get element data id
+     * @param  {String}  name
+     * @param  {Boolean} clean only clean the name
+     * @return {String}
+     */
+    Include.prototype.getId = function (name, clean) {
+        return (clean ? '' : this.uid + '-') + name.replace(/[^a-z0-9]+/g, '');
+    }
+
+    /**
+     * Get current script name
+     * @return {String}
+     */
+    Include.prototype.getFileName = function () {
+        var scripts = document.querySelectorAll('script'),
+            currentScript = scripts[scripts.length - 1],
+            currentPath = document.location.href.split('/'),
+            path = currentScript.src;
+
+        currentPath.pop();
+        currentPath = currentPath.join('/');
+        return path.replace(currentPath, '').substring(1);
+    };
+
+    /**
      * Check if a module is loaded
      */
     Include.prototype.checkModuleLoaded = function () {
@@ -88,14 +119,15 @@
 
             self.each(dependencies, function (dependencie, n, t) {
                 n = dependencie.push ? dependencie[0] : dependencie;
-                t = document.querySelector('[data-module="'+n+'"]');
-
-                if (modules[n] !== undefined) {
-                    args.push(modules[n]);
-                }
+                t = document.querySelector('[data-id*="' + self.getId(n, 1) + '"]');
 
                 if (t && t.nodeName == "LINK") {
                     args.push(null);
+                    return;
+                }
+
+                if (modules[n] !== undefined) {
+                    args.push(modules[n]);
                 }
             });
 
@@ -106,10 +138,7 @@
                 }
 
                 exec = typeof exec == 'function' ? exec.apply(this, args) : exec;
-
-                if (name !== null) {
-                    modules[name] = exec;
-                }
+                modules[name || self.getFileName()] = exec;
             }
         });
     }
@@ -118,9 +147,8 @@
      * onModuleLoaded
      * @param  {String}  name  name of the module
      * @param  {Number}  index index of the module
-     * @param  {Boolean} isCss
      */
-    Include.prototype.onModuleLoaded = function (name, index, isCss) {
+    Include.prototype.onModuleLoaded = function (name, index) {
         var self = this;
 
         // Is this script add a waiting module ? If not, that's a "normal" script file
@@ -173,7 +201,7 @@
         while (i--) {
             if (sheets[i].href.indexOf(href) != -1) {
                 elem.setAttribute('data-loaded', true);
-                self.onModuleLoaded(elem.getAttribute('data-module'), elem.getAttribute('data-count'), true);
+                self.onModuleLoaded(elem.getAttribute('data-module'), elem.getAttribute('data-count'));
 
                 self.checkModuleLoaded();
                 return;
@@ -260,6 +288,7 @@
                 elem.rel = "stylesheet"
             }
 
+            elem.setAttribute('data-id', self.getId(moduleName));
             elem.setAttribute('data-module', moduleName);
             elem.setAttribute('data-count',  scriptCounter);
             elem.setAttribute('data-loaded', false);

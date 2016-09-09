@@ -1,12 +1,8 @@
 describe("Replace define", function(){
     it("include should replace Require and Define", function(){
-        var test = false;
-
-        if (require && define) {
-            test = true;
-        }
-
-        expect(test).toBe(true);
+        expect(include).toEqual(jasmine.any(Function));
+        expect(require).toEqual(jasmine.any(Function));
+        expect(define).toEqual(jasmine.any(Function));
     });
 });
 
@@ -26,6 +22,17 @@ describe("Normal script", function(){
             done();
         });
     });
+
+    it("should be able to load script dependencies", function (done){
+        include(['https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js'], function () {
+            expect(hljs).toEqual(jasmine.any(Object));
+
+            include(['https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/javascript.min.js'], function () {
+                expect(hljs.listLanguages()).toContain("javascript");
+                done();
+            });
+        });
+    })
 });
 
 describe("Module name", function(){
@@ -84,9 +91,16 @@ describe("Include css", function(){
         });
     });
 
+    it("should be able to reload css", function(done){
+        include(['https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.css'], function(css){
+            expect(css).toBe(null);
+            done();
+        });
+    });
+
     it("should be able to load css and module", function(done){
-        inc = include([
-            'https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.css', 
+        include([
+            'https://cdnjs.cloudflare.com/ajax/libs/16pixels/0.1.6/16pixels.css', 
             'data/b.js'
         ], function(css, b){
             expect(css).toBe(null);
@@ -96,8 +110,8 @@ describe("Include css", function(){
     });
 
     it("should be able to load css and script as module", function(done){
-        inc = include([
-            'https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.css', 
+        include([
+            'https://cdnjs.cloudflare.com/ajax/libs/1140/2.0/1140.css', 
             ['stripe', 'https://js.stripe.com/v2/stripe.js']
         ], function(css, stripe){
             expect(css).toBe(null);
