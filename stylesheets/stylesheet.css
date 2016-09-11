@@ -160,6 +160,42 @@ a {
   padding-top: 3.2em;
 }
 
+
+@media print, screen and (max-width: 480px) {
+  .main-content table thead tr th:first-child, 
+  .main-content table tbody tr td:first-child {
+    width: 100%;
+    padding: 1rem;
+  }
+  
+  table,
+  table thead,
+  table tbody,
+  table tr,
+  table tr td,
+  table tr th {
+    display: block;
+    width: 100%;
+  }
+
+  .main-content .highlight pre, .main-content pre {
+    white-space: pre;
+    word-break: break-all;
+  }
+
+  .main-content table td.code.hasTitle {
+    padding-top: 0;
+  }
+
+  .main-content table tbody tr td {
+    padding-bottom: 1rem;
+  }
+}
+
+.jasmine_html-reporter {
+  margin: 0 !important;
+}
+
 .github-corner {
   position: fixed;
   z-index: 1;
