@@ -319,7 +319,7 @@
 
 
         if (moduleFile.indexOf('//') == -1 && !/\.js/.test(moduleFile) && !/^http/.test(moduleFile)) {
-            moduleFile = moduleFile.replace('.', '/');
+            moduleFile = moduleFile.replace(/\./g, '/');
             moduleFile = moduleFile + '.js';
         }
 
