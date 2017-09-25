@@ -199,7 +199,7 @@
 
         // loop on document stylesheets to check if media is loaded
         while (i--) {
-            if (sheets[i].href.indexOf(href) != -1) {
+            if (sheets[i].href && sheets[i].href.indexOf(href) != -1) {
                 elem.setAttribute('data-loaded', true);
                 self.onModuleLoaded(elem.getAttribute('data-module'), elem.getAttribute('data-count'));
                 return;
