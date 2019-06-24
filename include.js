@@ -318,7 +318,7 @@
         }
 
 
-        if (moduleFile.indexOf('//') == -1 && !/\.js/.test(moduleFile) && !/^http/.test(moduleFile)) {
+        if (!/\.css/.test(moduleFile) && moduleFile.indexOf('//') == -1 && !/\.js/.test(moduleFile) && !/^http/.test(moduleFile)) {
             moduleFile = moduleFile.replace(/\./g, '/');
             moduleFile = moduleFile + '.js';
         }
